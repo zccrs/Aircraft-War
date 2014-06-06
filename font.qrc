@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fzmw.ttf</file>
+    </qresource>
+</RCC>

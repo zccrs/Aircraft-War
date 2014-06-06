@@ -1,0 +1,286 @@
+Qt GameEnabler
+==============
+
+Qt GameEnabler provides a simple framework for game developers, enabling the 
+use of native OpenGL® ES 2.0 code within a Qt application. Qt GameEnabler does 
+not utilise QtOpenGL but overrides Qt's own rendering and replaces it with 
+native OpenGL. This enables applications to achieve maximum performance for 
+just their own use. An application created with Qt GameEnabler will run on all 
+devices supporting OpenGL ES 2.0. In addition, Qt GameEnabler provides a 
+lightweight, easy-to-use audio framework with rich features.
+
+The three main parts of Qt GameEnabler are:
+
+1. GE::GameWindow: A QGLWidget-like class which allows the inheriter to use
+   real OpenGL ES 2.0 instead of encapsulated QtOpenGL. The window will always
+   be full-screen and without any compositing enabled: Everything is rendered
+   directly on the screen. This prevents the user from using Qt's UI
+   functionality, but other parts of it are still usable. For example, QImage
+   can be used for loading GL textures.
+
+2. Audio framework: A set of classes providing a very simple and easy-to-use
+   system for loading WAV files as audio buffers and playing them with dynamic
+   attributes (speed, volume, and so on). Audio playback is implemented using
+   custom mixing and a single instance of QAudioOutput in either pull or push
+   mode.
+
+3. QML audio plug-in: QML extension plug-in which uses the audio framework to
+   provide simple AudioBuffer, AudioEffect, and AudioMixer elements for use
+   with QML
+
+This framework has been tested on Symbian^3, Maemo 5 (Nokia N900),
+and MeeGo 1.2 Harmattan (Nokia N9 and Nokia N950). In addition, the framework 
+supports desktop platforms with OpenGL ES 2.0 emulation libraries (PowerVR), 
+and has been tested on Windows XP and Windows 7.
+
+
+This example application is hosted in Nokia Developer Projects:
+- http://projects.developer.nokia.com/qtgameenabler
+
+For more information on implementation and porting, visit the wiki pages:
+- http://projects.developer.nokia.com/qtgameenabler/wiki
+
+What's new in 2.1
+-----------------
+
+ * Built-in OGG support
+
+
+1. Prerequisites
+-------------------------------------------------------------------------------
+ - Qt intermediate
+ - Qt Quick basics
+ - OpenGL basics
+
+
+2. Project structure and implementation
+-------------------------------------------------------------------------------
+
+2.1 Folders
+-----------
+ |
+ |- examples        The root folder of the example applications demonstrating
+ |  |               the use of Qt GameEnabler
+ |  |
+ |  |- bin          Compiled example binaries
+ |  |
+ |  |- qtgameenablerqmlaudiotest
+ |  |  |
+ |  |  |- audio     Contains the audio samples
+ |  |  |
+ |  |  |- gfx       Contains the graphics
+ |  |  |
+ |  |  |- qml       Contains QML source code
+ |  |  |
+ |  |  |- rsc       Contains the resource files
+ |  |
+ |  |- qtgameenablertest
+ |     |
+ |     |- graphics  Contains the graphics
+ |     |
+ |     |- sounds    Contains the audio samples
+ |     |
+ |     |- test_src  Contains the source code of the example
+ |
+ |- qtgameenabler   The root folder of the actual Qt GameEnabler source code.
+ |  |               Contains the project files, the license information and
+ |  |               this file (release notes).
+ |  |
+ |  |- features
+ |  |
+ |  |- icons        Contains the project icons
+ |  |
+ |  |- plugins      Contains the source code of the QML audio plug-in
+ |  |
+ |  |- src          Contains the source code of the OpenGL ES wrapper and the
+ |                  audio framework
+
+
+2.2 Important files and classes
+-------------------------------
+
+| Class                   | Description                                       |
+|-------------------------|---------------------------------------------------|
+| GameWindow              | The QGLWidget replacement with native             |
+|                         | OpenGL ES 2.0                                     |
+|-------------------------|---------------------------------------------------|
+| AudioSource             | An interface from which audio data can be pulled. |
+|                         | All of the playing is done via this class in      |
+|                         | GE::Audio. Custom audio sources must also be      |
+|                         | inherited from this interface.                    |
+|-------------------------|---------------------------------------------------|
+| AudioBuffer             | A class to contain a single audio buffer (for     |
+|                         | example, a single audio file, such as WAV). The   |
+|                         | audio buffer itself is not able to play anything, |
+|                         | it only contains the audio data.                  |
+|-------------------------|---------------------------------------------------|
+| AudioBufferPlayInstance | A class derived from IAudioSource which points to |
+|                         | an AudioBuffer and can provide its audio data via |
+|                         | IAudioSource's pull functionality                 |
+|-------------------------|---------------------------------------------------|
+| AudioMixer              | A helper class which contains a list of           |
+|                         | IAudioSources and methods to manipulate them. All |
+|                         | of the items in this list are mixed together when |
+|                         | the mixer's pullAudio is called.                  |
+|-------------------------|---------------------------------------------------|
+| AudioEffect             | An interface for audio effects, such as echo,     |
+|                         | which can be applied to the audio buffer or mixer |
+|                         | output. Current implementation includes cut-off   |
+|                         | (with resonance) and echo effects.                |                                  |-------------------------|---------------------------------------------------|
+| PushAudioOut            | "Push"-based audio output class                   |
+|-------------------------|---------------------------------------------------|
+| PullAudioOut            | "Pull"-based audio output class                   |
+|-------------------------|---------------------------------------------------|
+| AudioPlugin             | Use this to register the QML extension plug-in    |
+|                         | which provides simple AudioBuffer, AudioEffect,   |
+|                         | and AudioMixer elements for QML.                  |
+|-------------------------|---------------------------------------------------|
+| VorbisSource            | An audiosource capable of playing an OGG stream   |
+|-------------------------|---------------------------------------------------|
+
+2.3 Used APIs/QML elements/Qt Quick Components
+----------------------------------------------
+
+ - OpenGL ES (1.1 or 2.0)
+ - QAudioOut
+
+
+3. Compatibility
+-------------------------------------------------------------------------------
+
+ - Symbian devices with Qt 4.7.3 or higher.
+ - MeeGo 1.2 Harmattan.
+ - Windows desktop (PowerVR GLES2 emulation)
+ - Linux desktop
+ 
+Tested to work on
+ - Nokia C6-01
+ - Nokia C7-00
+ - Nokia E6-00
+ - Nokia E7-00
+ - Nokia N8-00
+ - Nokia N9
+ - Nokia N950
+ - Windows XP
+ - Windows 7
+ 
+Developed with Qt SDK 1.2.
+
+3.1 Required Capabilities
+-------------------------
+
+None; The application can be self signed on Symbian.
+
+3.2 Known Issues
+----------------
+
+None.
+
+
+4. Building, installing, and running the application
+-------------------------------------------------------------------------------
+
+The project contains two examples which demonstrate the use of Qt GameEnabler.
+The Qt GameEnabler Test example is a simple application that utilises both the 
+OpenGL and the audio features of Qt GameEnabler. The example is located in the 
+folder 'examples/qtgameenablertest'.
+
+The Qt GameEnabler QML Audio Test example demonstrates the use of the QML 
+audio plug-in. While the application does not utilise OpenGL, the user 
+interface is implemented with QML code. The example is located in the folder 
+'examples/qtgameenablerqmlaudiotest'.
+
+4.1 Preparations
+----------------
+
+Check that you have the latest Qt/Qt SDK installed in the development
+environment and on the device.
+
+Note: The Qt GameEnabler Test example application, which utilises OpenGL, can 
+be compiled directly on any device with OpenGL ES 2.0 support, for example, 
+Maemo or Symbian^3 devices. However, if you wish to compile it on some other 
+platform - desktop Windows, for example - you must have external OpenGL ES 2.0 
+emulation libraries. With Windows or Linux (32bit) desktop, you can use 
+Khronos OpenGL ES 2.0 PC-emulation libraries from www.imgtec.com:
+http://www.imgtec.com/powervr/insider/sdkdownloads/index.asp#GLES2
+
+The Qt GameEnabler QML Audio Test example compiles and runs also on platforms 
+without OpenGL ES 2.0 support.
+
+4.2 Using the Qt SDK
+--------------------
+
+You can install and run the application on the device by using the Qt SDK.
+Open the project in the SDK, set up the correct target (depending on the device
+platform), and click the Run button. For more details about this approach,
+visit the Qt Getting Started section at Nokia Developer
+(http://www.developer.nokia.com/Develop/Qt/Getting_started/).
+
+4.3 Symbian device
+------------------
+
+Make sure your device is connected to your computer. Locate the .sis
+installation file and open it with Ovi Suite. Accept all requests from Ovi
+Suite and the device. Note that you can also install the application by copying
+the installation file onto your device and opening it with the Symbian File
+Manager application.
+
+After the application is installed, locate the application icon from the
+application menu and launch the application by tapping the icon.
+
+4.4 Nokia N9 and Nokia N950
+---------------------------
+
+Copy the application Debian package onto the device. Locate the file with the
+device and run it; this will install the application. Note that you can also
+use the terminal application and install the application by typing the command
+'dpkg -i <package name>.deb' on the command line. To install the application
+using the terminal application, make sure you have the right privileges 
+to do so (e.g. root access).
+
+Once the application is installed, locate the application icon from the
+application menu and launch the application by tapping the icon.
+
+4.5 Desktop computers
+---------------------------
+
+Select a desktop target. Modify the qtgameenabler.pri file's according 
+section's GLES2 include and library  paths according to where you have 
+installed the GLES Emulation SDK:
+   'INCLUDEPATH += /PowerVRSDK/Builds/OGLES2/Include' and
+   'LIBS +=  -L/PowerVRSDK/Builds/OGLES2/WindowsPC/Lib' must point to valid
+   locations.
+
+
+5. License
+-------------------------------------------------------------------------------
+
+See the license text file delivered with this project. The license file is also
+available online at
+http://projects.developer.nokia.com/<identifier>/browser/trunk/Licence.txt
+
+OpenGL is a registered trademark and the OpenGL ES logo is a trademark of
+Silicon Graphics Inc. used by permission by Khronos (http://www.khronos.org/).
+
+
+6. Related documentation
+-------------------------------------------------------------------------------
+Qt GameEnabler wiki:
+- http://projects.developer.nokia.com/qtgameenabler/wiki
+- http://projects.developer.nokia.com/qtgameenabler/wiki/graphics
+- http://projects.developer.nokia.com/qtgameenabler/wiki/audio
+- http://projects.developer.nokia.com/qtgameenabler/wiki/audio_qml
+- http://projects.developer.nokia.com/qtgameenabler/wiki/examples
+
+
+7. Version history
+-------------------------------------------------------------------------------
+
+2.1     Built-in OGG support. New documentation.
+2.0     Various improvements, QML audio plug-in implementation, and two new
+        examples
+1.1     Added MeeGo 1.2 Harmattan support
+1.0.2   Minor modifications related to Symbian audio handling
+1.0.1   Added Debian packaging files for Maemo target
+1.0     First version
+

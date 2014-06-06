@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Image/n9.png</file>
+        <file>Image/n9-w.png</file>
+        <file>Image/n9-r.png</file>
+        <file>qml/general/About.qml</file>
+        <file>qml/general/Game.qml</file>
+        <file>qml/general/Rank.qml</file>
+        <file>qml/general/Setting.qml</file>
+        <file>qml/symbian3/main.qml</file>
+        <file>qml/symbian3/Music.qml</file>
+        <file>qml/general/HttpRequest.qml</file>
+        <file>qml/meego/main.qml</file>
+        <file>qml/meego/Music.qml</file>
+        <file>qml/general/UserCenter.qml</file>
+        <file>qml/general/DeviceInfo.qml</file>
+    </qresource>
+</RCC>

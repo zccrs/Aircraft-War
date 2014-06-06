@@ -1,0 +1,52 @@
+!symbian {
+    INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtGameEnabler
+} else {
+    load(data_caging_paths)
+
+    INCLUDEPATH+=$$MW_LAYER_PUBLIC_EXPORT_PATH(QtGameEnabler)
+}
+
+symbian {
+    CONFIG += mobility
+    MOBILITY += multimedia systeminfo
+
+    LIBS += -llibEGL -llibGLESv2 -lcone -leikcore -lavkon
+    LIBS += -lws32 -laccmonitor
+    LIBS += -lremconcoreapi -lremconinterfacebase
+    LIBS += -lmmfdevsound
+}
+
+unix:!symbian {
+    LIBS += -lX11 -lEGL -lGLESv2
+
+    maemo5 {
+        QT += multimedia
+        CONFIG += mobility
+        MOBILITY += systeminfo
+    }
+    else {
+        contains(MEEGO_EDITION, harmattan) {
+            DEFINES += MEEGO_EDITION_HARMATTAN
+            CONFIG += mobility
+            MOBILITY += multimedia systeminfo
+            QT += meegographicssystemhelper
+        }
+        else {
+            CONFIG += mobility
+            MOBILITY += multimedia systeminfo
+        }
+    }
+}
+
+windows: {
+    QT += multimedia
+    DEFINES += GE_NOMOBILITY
+    LIBS += -llibEGL -llibGLESv2
+}
+
+win32:CONFIG(debug, debug|release) {
+    LIBS += -lQtGameEnabler$${QT_LIBINFIX}d
+} else {
+    LIBS += -lQtGameEnabler$${QT_LIBINFIX}
+}
+

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>i18n/des.js</file>
+        <file>i18n/comment.css</file>
+    </qresource>
+</RCC>
