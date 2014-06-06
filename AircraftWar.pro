@@ -25,6 +25,7 @@ include(qtgameenabler/qtgameenableraudioplugin.pri)
 
 win32{
     QT += multimedia
+    RESOURCES += font.qrc
     #OTHER_FILES += ./qml/general/*
 }
 # Additional import path used to resolve QML modules in Creator's code model

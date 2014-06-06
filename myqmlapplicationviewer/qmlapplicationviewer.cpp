@@ -164,9 +164,9 @@ void QmlApplicationViewer::showExpanded()
     show();
 #endif
 }
-void QmlApplicationViewer::setPos(int x, int y)
+void QmlApplicationViewer::setPos(int w, int h)
 {
-    move(x,y);
+    move(QPoint(w/2 - width()/2,h/2 - height()/2));
 }
 
 QApplication *createApplication(int &argc, char **argv)

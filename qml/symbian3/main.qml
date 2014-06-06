@@ -178,13 +178,16 @@ Item{
             anchors.topMargin: 10
             property string font_names:"00"
 
-            FontLoader { id: localFont;
+            FontLoader {
+                id: localFont
+                source: "qrc:/fzmw.ttf"
             }
             Text{
                 id:double_text
                 color: "#303030"
                 font.family: localFont.name
-                font.pixelSize: 26
+                font.pixelSize: 22
+                font.bold: true
                 text:"双击屏幕开始游戏"
             }
 

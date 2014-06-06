@@ -41,7 +41,7 @@ signals:
 private:
     class QmlApplicationViewerPrivate *d;
 public slots:
-    void setPos(int x,int y);
+    void setPos(int,int);
 };
 
 QApplication *createApplication(int &argc, char **argv);

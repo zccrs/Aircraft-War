@@ -58,6 +58,9 @@ Item
     function addScore(score)
     {
         utility.console( "两个记录分数的值分别是："+score+","+mysettings.getValue("myscore",parseInt(0)) )
+        var temp_times1 = parseInt(planes.gameRuningTime/60000)
+        //temp_times1 = temp_times1==0?1:temp_times1
+        utility.console("所用时间是："+temp_times1)
 
         var temp = mysettings.getValue("cacheScore","")
         var temp1 = mysettings.getValue("cacheScoreInt",0)
@@ -81,8 +84,7 @@ Item
 
             var str_temp = utility.base64Encode(des_data)
             var temp_times = parseInt(planes.gameRuningTime/60000)
-            temp_times = temp_times==0?1:temp_times
-            var postdata = "{\"score\":\""+str_temp+"\",\"model\":\""+utility.productName+"\",\"time\":"+temp_times+"}"
+            var postdata = "{\"score\":\""+str_temp+"\",\"model\":\""+utility.productName+"\",\"time\":"+String(temp_times+1)+"}"
             console.log(postdata)
             cacheScore = postdata//记录要post的数据
 
@@ -149,7 +151,8 @@ Item
             Text{
                 color: "#303030"
                 font.family: localFont.name
-                font.pixelSize: main.height!=640?34:28
+                font.pixelSize: main.height == 854?34:28
+                font.bold: true
                 text:"退出"
                 anchors.centerIn: parent
             }
@@ -175,10 +178,10 @@ Item
             scale:main.height!=640?1:0.75
             smooth: true
             Text{
-
                 color: "#303030"
                 font.family: localFont.name
-                font.pixelSize: main.height!=640?34:28
+                font.pixelSize: main.height == 854?34:28
+                font.bold: true
                 text:"重新开始"
                 anchors.centerIn: parent
             }
@@ -205,10 +208,10 @@ Item
             scale:main.height!=640?1:0.75
             smooth: true
             Text{
-
                 color: "#303030"
                 font.family: localFont.name
-                font.pixelSize: main.height!=640?34:28
+                font.pixelSize: main.height == 854?34:28
+                font.bold: true
                 text:"继续"
                 anchors.centerIn: parent
             }
@@ -275,7 +278,8 @@ Item
             Text{
                 color: "#303030"
                 font.family: localFont.name
-                font.pixelSize: main.height==854?34:28
+                font.pixelSize: main.height == 854?34:28
+                font.bold: true
                 text:"退出"
                 anchors.centerIn: parent
 
@@ -302,7 +306,8 @@ Item
             Text{
                 color: "#303030"
                 font.family: localFont.name
-                font.pixelSize: main.height==854?34:28
+                font.pixelSize: main.height == 854?34:28
+                font.bold: true
                 text:"再玩一次"
                 anchors.centerIn: parent
             }

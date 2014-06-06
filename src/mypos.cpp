@@ -6,13 +6,14 @@ MyPos::MyPos(Settings *setting,QLabel *parent) :
     QLabel(parent)
 {
     mysetting=setting;
-    state=mysetting->getValue("mypos-state",0).toInt();
+    state = mysetting->getValue("mypos-state",0).toInt();
     //qDebug()<<"mypos:"<<state;
     if(state==0)
         image.load(":/Image/n9-w.png");
     else if(state==1)
         image.load(":/Image/n9.png");
-    else image.load(":/Image/n9-r.png");
+    else
+        image.load(":/Image/n9-r.png");
     pixmap=QPixmap::fromImage(image);
     setPixmap(pixmap);
     setFixedSize(image.size());
@@ -24,18 +25,18 @@ void MyPos::mousePressEvent(QMouseEvent *event)
 void MyPos::mouseMoveEvent(QMouseEvent *event)
 {
     move(pos()+event->pos()-mousePos);
-
 }
 void MyPos::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    state++;
-    if(state>2) state=0;
+    if( ++state >2) state=0;
+    mysetting->setValue( "mypos-state",state );
     //qDebug()<<state;
     if(state==0)
         image.load(":/Image/n9-w.png");
     else if(state==1)
         image.load(":/Image/n9.png");
-    else image.load(":/Image/n9-r.png");
+    else
+        image.load(":/Image/n9-r.png");
     pixmap=QPixmap::fromImage(image);
     setPixmap(pixmap);
     setFixedSize(image.size());
@@ -44,5 +45,4 @@ void MyPos::mouseDoubleClickEvent(QMouseEvent *event)
 MyPos::~MyPos()
 {
     mysetting->setValue("mypos-state",state);
-    //qDebug()<<mysetting->getValue("mypos-state",0).toInt();
 }
