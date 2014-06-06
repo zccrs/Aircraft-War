@@ -210,7 +210,7 @@ Item{
         Text{
             anchors.centerIn: parent
             font.family: localFont.name
-            font.pixelSize: parent.height!=640?32:26
+            font.pixelSize: parent.height!=640?32:24
             text: "<b>刷新排行榜</b>";
             color: "#303030"
             //visible: main.height!=640?true:false
@@ -222,7 +222,7 @@ Item{
         Behavior on opacity {
             NumberAnimation{duration: 300}
         }
-        source: "qrc:/Image/dialog.png"
+        source: "qrc:/Image/button_1.png"
         anchors.centerIn: parent
         sourceSize.width: parent.width-40
         clip:true
@@ -236,7 +236,7 @@ Item{
             id: title
             font.family: localFont.name
             text:"详细信息"
-            font.pixelSize: parent.height!=640?32:26
+            font.pixelSize: rank_main.height!=640?32:24
             anchors.horizontalCenter: parent.horizontalCenter
             y:20
         }
@@ -244,7 +244,7 @@ Item{
             id: phone_model
             font.family: localFont.name
             text:"手机型号："
-            font.pixelSize: parent.height!=640?32:26
+            font.pixelSize: rank_main.height!=640?32:22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: title.bottom
             anchors.topMargin: 30
@@ -253,16 +253,31 @@ Item{
             id: game_time
             font.family: localFont.name
             text:"所用时间："
-            font.pixelSize: parent.height!=640?32:26
+            font.pixelSize: rank_main.height!=640?32:22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: phone_model.bottom
             anchors.topMargin: 10
         }
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                music.start_music("button")
-                user_info_detail.opacity = 0
+        Image{
+            source:finish_button.pressed? "qrc:/Image/button_2_2.png": "qrc:/Image/button_2_1.png"
+            scale: main.height!=640?1:0.75
+            smooth: true
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+            Text {
+                anchors.centerIn: parent
+                text: "完成"
+                font.family: localFont.name
+                font.pixelSize: main.height!=640?34:26
+            }
+            MouseArea{
+                id: finish_button
+                anchors.fill: parent
+                onClicked: {
+                    music.start_music("button")
+                    user_info_detail.opacity = 0
+                }
             }
         }
     }

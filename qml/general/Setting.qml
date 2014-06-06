@@ -261,7 +261,7 @@ Item
             id: dialog_text
             font.family: localFont.name
             anchors.centerIn: parent
-            font.pixelSize: main.height!=640?34:28
+            font.pixelSize: main.height!=640?34:26
         }
 
         Image{
@@ -277,7 +277,7 @@ Item
                 anchors.centerIn: parent
                 text: "下载"
                 font.family: localFont.name
-                font.pixelSize: main.height!=640?34:28
+                font.pixelSize: main.height!=640?34:26
             }
             MouseArea{
                 id: yes_download
@@ -302,7 +302,7 @@ Item
                 anchors.centerIn: parent
                 text: "取消"
                 font.family: localFont.name
-                font.pixelSize: main.height!=640?34:28
+                font.pixelSize: main.height!=640?34:26
             }
             MouseArea{
                 id: no_download
@@ -325,7 +325,7 @@ Item
                 anchors.centerIn: parent
                 text: "完成"
                 font.family: localFont.name
-                font.pixelSize: main.height!=640?34:28
+                font.pixelSize: main.height!=640?34:26
             }
             MouseArea{
                 id: finish_button
