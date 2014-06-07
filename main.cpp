@@ -1,4 +1,4 @@
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QDeclarativeContext>
 #include <QDeclarativeView>
 #include <QDesktopWidget>
@@ -8,8 +8,8 @@
 #include <QImage>
 #include <QPixmap>
 #include <QDebug>
-#include <QCoreApplication>
 #include <QSysInfo>
+#include "src/mynetworkaccessmanagerfactory.h"
 #include "qmlapplicationviewer.h"
 #include "src/settings.h"
 #include "src/windowplanes.h"
@@ -17,6 +17,7 @@
 #include "audioplugin.h"
 
 #if defined(Q_OS_SYMBIAN)||defined(HARMATTAN_BOOSTER)||defined(Q_WS_SIMULATOR)
+
 #else
 #include "src/mypos.h"
 #endif
@@ -40,11 +41,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     int width=QApplication::desktop()->width();
     int height=QApplication::desktop()->height();
 #if defined(Q_WS_SIMULATOR)
-    QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("localhost");
-    proxy.setPort(8888);
-    QNetworkProxy::setApplicationProxy(proxy);
+    //QNetworkProxy proxy;
+    //proxy.setType(QNetworkProxy::HttpProxy);
+    //proxy.setHostName("localhost");
+    //proxy.setPort(8888);
+   // QNetworkProxy::setApplicationProxy(proxy);
 #endif
 
 #if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
@@ -65,10 +66,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);// 锁定为竖屏
+
+#elif defined(Q_OS_LINUX)
+    QmlApplicationViewer viewer;
 #else
     MyPos mypos(&setting);
     QmlApplicationViewer viewer(&mypos);
 #endif
+    MyNetworkAccessManagerFactory *network = new MyNetworkAccessManagerFactory();
+    viewer.engine()->setNetworkAccessManagerFactory(network);
+
     Utility utility (app->applicationVersion() ) ;
     viewer.rootContext()->setContextProperty("mysettings",&setting);
     viewer.rootContext()->setContextProperty("utility",&utility);
@@ -81,7 +88,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #elif HARMATTAN_BOOSTER
     viewer.setSource(QUrl("qrc:/qml/meego/main.qml"));
     viewer.showExpanded();
+#elif defined(Q_OS_LINUX)
+    viewer.setSource(QUrl("qrc:/qml/symbian3/main.qml"));
+    viewer.setFixedSize(viewer.width(),viewer.height());
+    viewer.move(width/2-viewer.width()/2,height/2-viewer.height()/2);
+    viewer.show();
 #else
+    //QNetworkProxy proxy;
+    //proxy.setType(QNetworkProxy::HttpProxy);
+    //proxy.setHostName("localhost");
+    //proxy.setPort(8888);
+    //QNetworkProxy::setApplicationProxy(proxy);
+
     viewer.setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     mypos.setWindowFlags(Qt::FramelessWindowHint);
     mypos.setAttribute(Qt::WA_TranslucentBackground);

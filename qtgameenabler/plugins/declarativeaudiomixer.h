@@ -13,7 +13,9 @@
 
 #include <QDeclarativeItem>
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
 #include <QSystemDeviceInfo>
+#endif
 #endif
 
 #include "audiomixer.h"
@@ -27,7 +29,9 @@
 #endif // Q_OS_SYMBIAN
 
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
 QTM_USE_NAMESPACE
+#endif
 #endif
 
 namespace GE {
@@ -66,7 +70,9 @@ public slots:
 
 protected slots:
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
     void profileChanged(QSystemDeviceInfo::Profile profile);
+#endif
 #endif
 
 #ifdef Q_OS_SYMBIAN
@@ -100,7 +106,9 @@ private:
     QList<DeclarativeAudioEffect *> m_effects;
 
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
     QSystemDeviceInfo *m_systemDeviceInfo;
+#endif
 #endif
 
 #ifdef Q_OS_SYMBIAN

@@ -11,7 +11,7 @@
 #ifndef GEAUDIOOUT_H
 #define GEAUDIOOUT_H
 
-#include <QAudioFormat>
+#include <QtMultimedia/QAudioFormat>
 #include "audiosourceif.h"
 
 namespace GE {

@@ -1,10 +1,10 @@
 # Add more folders to ship with the application, here
-QT += network webkit
+QT += network webkit multimedia
 TARGET = AircraftWar
 TEMPLATE = app
 VERSION = 2.0.1
-CONFIG += mobility
-MOBILITY += multimedia systeminfo
+#CONFIG += mobility
+MOBILITY += systeminfo
 
 general_qml.source = qml/general
 general_qml.target = qml
@@ -23,13 +23,16 @@ folder_02.target = ./
 
 include(qtgameenabler/qtgameenableraudioplugin.pri)
 
+unix{
+    RESOURCES += font.qrc
+    #OTHER_FILES += ./qml/general/*
+}
 win32{
-    QT += multimedia
     RESOURCES += font.qrc
     #OTHER_FILES += ./qml/general/*
 }
 # Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH += ./
 
 symbian {
     #DEPLOYMENTFOLDERS += general_qml
@@ -100,9 +103,14 @@ SOURCES += main.cpp \
     src/prop.cpp \
     src/settings.cpp \
     src/windowplanes.cpp \
-    src/utility.cpp
+    src/utility.cpp \
+    src/mynetworkaccessmanagerfactory.cpp
 
 
+unix{
+    SOURCES += \
+    src/mypos.cpp
+}
 win32{
     SOURCES += \
     src/mypos.cpp
@@ -140,10 +148,15 @@ HEADERS += \
     src/prop.h \
     src/settings.h \
     src/windowplanes.h \
-    src/utility.h
+    src/utility.h \
+    src/mynetworkaccessmanagerfactory.h
 
 
-win32:{
+unix{
+    HEADERS += \
+    src/mypos.h
+}
+win32{
     HEADERS += \
     src/mypos.h
 }

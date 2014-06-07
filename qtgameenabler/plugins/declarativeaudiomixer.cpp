@@ -22,7 +22,9 @@ DeclarativeAudioMixer::DeclarativeAudioMixer(QDeclarativeItem *parent)
       m_timerId(0),
       m_audioEnabled(true)
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
       ,m_systemDeviceInfo(NULL)
+#endif
 #endif
 #ifdef Q_OS_SYMBIAN
       ,m_volumeKeys(NULL)
@@ -31,10 +33,12 @@ DeclarativeAudioMixer::DeclarativeAudioMixer(QDeclarativeItem *parent)
     DEBUG_INFO(this);
 
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
     m_systemDeviceInfo = new QSystemDeviceInfo(this);
     connect(m_systemDeviceInfo,
         SIGNAL(currentProfileChanged(QSystemDeviceInfo::Profile)),
         this, SLOT(profileChanged(QSystemDeviceInfo::Profile)));
+#endif
 #endif
 
 #ifdef Q_OS_SYMBIAN
@@ -51,7 +55,9 @@ DeclarativeAudioMixer::~DeclarativeAudioMixer()
     DEBUG_POINT;
     stopAudio();
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
     delete m_systemDeviceInfo;
+#endif
 #endif
 #ifdef Q_OS_SYMBIAN
     delete m_volumeKeys;
@@ -64,8 +70,10 @@ void DeclarativeAudioMixer::startAudio()
 
     if (m_audioOutput || !m_audioEnabled
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
         || m_systemDeviceInfo->currentProfile() ==
         QSystemDeviceInfo::SilentProfile
+#endif
 #endif
         )
     {
@@ -174,6 +182,7 @@ void DeclarativeAudioMixer::stopPlayback()
 }
 
 #ifndef GE_NOMOBILITY
+#ifndef Q_OS_UNIX
 void DeclarativeAudioMixer::profileChanged(QSystemDeviceInfo::Profile profile)
 {
     if (profile == QSystemDeviceInfo::SilentProfile) {
@@ -183,6 +192,7 @@ void DeclarativeAudioMixer::profileChanged(QSystemDeviceInfo::Profile profile)
             startAudio();
     }
 }
+#endif
 #endif
 
 QDeclarativeListProperty<DeclarativeAudioEffect>

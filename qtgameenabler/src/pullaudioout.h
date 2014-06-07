@@ -11,7 +11,7 @@
 #ifndef GEPULLAUDIOOUT_H
 #define GEPULLAUDIOOUT_H
 
-#include <QAudioOutput>
+#include <QtMultimedia/QAudioOutput>
 #include <QIODevice>
 #include <QPointer>
 #include "geglobal.h"
