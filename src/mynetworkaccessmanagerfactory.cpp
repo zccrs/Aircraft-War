@@ -29,7 +29,7 @@ QNetworkAccessManager* MyNetworkAccessManagerFactory::create(QObject *parent)
         diskCache->setMaximumCacheSize(3*1024*1024);
         manager->setCache(diskCache);
     }
-
+    
     QNetworkCookieJar* cookieJar = NetworkCookieJar::GetInstance();
     manager->setCookieJar(cookieJar);
     cookieJar->setParent(0);
@@ -59,11 +59,10 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
     req.setSslConfiguration(config);
     // set user-agent
     if (op == PostOperation){
-        req.setRawHeader("User-Agent", "IDP");
+        req.setRawHeader("User-Agent", "IDP789");
     } else {
         req.setRawHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53");
     }
-
     QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
     return reply;
 }
