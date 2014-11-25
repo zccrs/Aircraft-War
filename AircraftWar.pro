@@ -1,42 +1,18 @@
 # Add more folders to ship with the application, here
-QT += network webkit multimedia
 TARGET = AircraftWar
-TEMPLATE = app
-VERSION = 2.0.1
-#CONFIG += mobility
+# Additional import path used to resolve QML modules in Creator's code model
+QML_IMPORT_PATH =
+
+QT += network webkit
+VERSION = 2.1.0
+CONFIG += mobility
 MOBILITY += systeminfo
 
-general_qml.source = qml/general
-general_qml.target = qml
-
-all_qml.source = qml
-all_qml.target = ./
-
-symbian3_qml.source = qml/symbian3
-symbian3_qml.target = qml
-
-meego_qml.source = qml/meego
-meego_qml.target = qml
-
-folder_02.source = data
-folder_02.target = ./
-
-include(qtgameenabler/qtgameenableraudioplugin.pri)
-
-unix{
-    RESOURCES += font.qrc
-    #OTHER_FILES += ./qml/general/*
-}
-win32{
-    RESOURCES += font.qrc
-    #OTHER_FILES += ./qml/general/*
-}
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH += ./
-
+sound.source = sound
+sound.target = ./
 symbian {
-    #DEPLOYMENTFOLDERS += general_qml
-    #DEPLOYMENTFOLDERS += symbian3_qml
+
+    DEPLOYMENTFOLDERS += sound
     TARGET.UID3 = 0x20072840
     TARGET.CAPABILITY += NetworkServices
     contains(S60_VERSION, 5.0){
@@ -46,16 +22,15 @@ symbian {
     }
 }
 contains(MEEGO_EDITION, harmattan){
-    #DEPLOYMENTFOLDERS += meego_qml general_qml
-    RESOURCES += font.qrc
-
     icon64.files += $${TARGET}64.png
     icon64.path = /usr/share/icons/hicolor/64x64/apps
     data.files += ./data/MeeGo.png
-    data.files += ./data/fzmw.ttf
-    data.path =/opt/$${TARGET}/data
+    data.files += fzmw.ttf
+    data.files += ./sound/*.wav
+    data.path = /opt/$${TARGET}/data
     iconsvg.files += $${TARGET}meego.svg
     iconsvg.path = /usr/share/themes/base/meegotouch/$${TARGET}
+
     # Classify the application as a game to support volume keys on Harmattan.
     gameclassify.files += qtc_packaging/debian_harmattan/$${TARGET}.conf
     gameclassify.path = /usr/share/policy/etc/syspart.conf.d
@@ -71,8 +46,20 @@ contains(MEEGO_EDITION, harmattan){
 
     INSTALLS += icon64 gameclassify iconsvg data
 }
-simulator:{
-    #DEPLOYMENTFOLDERS += all_qml general_qml
+
+
+win32{
+    RESOURCES += pcdata.qrc font.qrc
+    HEADERS += \
+        src/mypos.h
+
+    SOURCES += \
+        src/mypos.cpp
+}
+
+simulator{
+    RESOURCES += font.qrc
+    DEPLOYMENTFOLDERS += sound
 }
 # Smart Installer package's UID
 # This UID is from the protected range and therefore the package will
@@ -89,11 +76,21 @@ simulator:{
 # MOBILITY +=
 
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
-CONFIG += qdeclarative-boostable
+# CONFIG += qdeclarative-boostable
 
 # Add dependency to Symbian components
 # CONFIG += qt-components
-
+HEADERS += \
+    src/bullet.h \
+    src/enemy.h \
+    src/myplanes.h \
+    src/mythread.h \
+    src/prop.h \
+    src/settings.h \
+    src/windowplanes.h \
+    src/utility.h \
+    src/mynetworkaccessmanagerfactory.h \
+    src/myimage.h
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     src/bullet.cpp \
@@ -104,22 +101,28 @@ SOURCES += main.cpp \
     src/settings.cpp \
     src/windowplanes.cpp \
     src/utility.cpp \
-    src/mynetworkaccessmanagerfactory.cpp
+    src/mynetworkaccessmanagerfactory.cpp \
+    src/myimage.cpp
 
-
-unix{
-    SOURCES += \
-    src/mypos.cpp
-}
-win32{
-    SOURCES += \
-    src/mypos.cpp
-}
 # Please do not modify the following two lines. Required for deployment.
-include(myqmlapplicationviewer/myqmlapplicationviewer.pri)
+include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
+include(qtgameenabler/qtgameenableraudioplugin.pri)
 
 OTHER_FILES += \
+    qml/meego/Music.qml \
+    qml/meego/main.qml \
+    qml/general/UserCenter.qml \
+    qml/general/Setting.qml \
+    qml/general/Rank.qml \
+    qml/general/HttpRequest.qml \
+    qml/general/Game.qml \
+    qml/general/DeviceInfo.qml \
+    qml/general/About.qml \
+    qml/symbian3/Music.qml \
+    qml/symbian3/main.qml \
+    i18n/des.js \
+    i18n/comment.css \
     qtc_packaging/debian_harmattan/rules \
     qtc_packaging/debian_harmattan/README \
     qtc_packaging/debian_harmattan/manifest.aegis \
@@ -127,36 +130,7 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog \
-    qml/general/* \
-    qml/meego/* \
-    qml/symbian3/* \
-    i18n/des.js \
-    qml/general/DeviceInfo.qml
+    qtc_packaging/debian_harmattan/AircraftWar.conf \
+    AircraftWarmeego.svg
 
-RESOURCES += \
-    planes.qrc \
-    music.qrc \
-    sound.qrc \
-    des.qrc \
-    qml.qrc
-
-HEADERS += \
-    src/bullet.h \
-    src/enemy.h \
-    src/myplanes.h \
-    src/mythread.h \
-    src/prop.h \
-    src/settings.h \
-    src/windowplanes.h \
-    src/utility.h \
-    src/mynetworkaccessmanagerfactory.h
-
-
-unix{
-    HEADERS += \
-    src/mypos.h
-}
-win32{
-    HEADERS += \
-    src/mypos.h
-}
+RESOURCES += des.qrc qml.qrc planes.qrc

@@ -15,9 +15,9 @@
 #include "src/windowplanes.h"
 #include "src/utility.h"
 #include "audioplugin.h"
+#include "src/myimage.h"
 
-#if defined(Q_OS_SYMBIAN)||defined(HARMATTAN_BOOSTER)||defined(Q_WS_SIMULATOR)
-
+#if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
 #else
 #include "src/mypos.h"
 #endif
@@ -34,21 +34,23 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QApplication> app(createApplication(argc, argv));
     app->setApplicationName ("Airplane War");
     app->setOrganizationName ("Stars");
-    app->setApplicationVersion ("2.0.1");
+    app->setApplicationVersion ("2.1.0");
 
     QWebSettings::globalSettings()->setUserStyleSheetUrl(QUrl::fromLocalFile(":/i18n/comment.css"));
 
-    int width=QApplication::desktop()->width();
-    int height=QApplication::desktop()->height();
+    //int width=QApplication::desktop()->width();
+    //int height=QApplication::desktop()->height();
 #if defined(Q_WS_SIMULATOR)
-    //QNetworkProxy proxy;
-    //proxy.setType(QNetworkProxy::HttpProxy);
-    //proxy.setHostName("localhost");
-    //proxy.setPort(8888);
-   // QNetworkProxy::setApplicationProxy(proxy);
+    QNetworkProxy proxy;
+    proxy.setType(QNetworkProxy::HttpProxy);
+    proxy.setHostName("localhost");
+    proxy.setPort(8888);
+    QNetworkProxy::setApplicationProxy(proxy);
 #endif
 
 #if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
+    int width=QApplication::desktop()->width();
+
     QString splash_path;
     if(width == 640)
         splash_path = ":/Image/Symbian640.png";
@@ -61,8 +63,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     Settings setting;
+
     qmlRegisterType<WindowPlanes> ("planes",1,0,"Myplanes");
-#if defined(Q_OS_SYMBIAN)||defined(HARMATTAN_BOOSTER)||defined(Q_WS_SIMULATOR)
+    qmlRegisterType<MyImage> ("com.star.widget",1,0,"MyImage");
+
+#if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);// 锁定为竖屏
@@ -72,11 +77,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #else
     MyPos mypos(&setting);
     QmlApplicationViewer viewer(&mypos);
+    mypos.init(&viewer);
+
 #endif
     MyNetworkAccessManagerFactory *network = new MyNetworkAccessManagerFactory();
     viewer.engine()->setNetworkAccessManagerFactory(network);
 
-    Utility utility (app->applicationVersion() ) ;
+    Utility utility;
     viewer.rootContext()->setContextProperty("mysettings",&setting);
     viewer.rootContext()->setContextProperty("utility",&utility);
 
@@ -85,7 +92,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
     viewer.setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     viewer.showExpanded();
-#elif HARMATTAN_BOOSTER
+#elif defined(MEEGO_EDITION_HARMATTAN)
     viewer.setSource(QUrl("qrc:/qml/meego/main.qml"));
     viewer.showExpanded();
 #elif defined(Q_OS_LINUX)
@@ -94,19 +101,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.move(width/2-viewer.width()/2,height/2-viewer.height()/2);
     viewer.show();
 #else
-    //QNetworkProxy proxy;
-    //proxy.setType(QNetworkProxy::HttpProxy);
-    //proxy.setHostName("localhost");
-    //proxy.setPort(8888);
-    //QNetworkProxy::setApplicationProxy(proxy);
-
     viewer.setSource(QUrl("qrc:/qml/symbian3/main.qml"));
     mypos.setWindowFlags(Qt::FramelessWindowHint);
     mypos.setAttribute(Qt::WA_TranslucentBackground);
     viewer.setWindowFlags(Qt::FramelessWindowHint);
     viewer.setAttribute(Qt::WA_TranslucentBackground);
-    mypos.connect(&mypos,SIGNAL(myStateChanged(int,int)),&viewer,SLOT(setPos(int ,int)));
-    mypos.connect(&viewer,SIGNAL(quit()),&mypos,SLOT(close()));
+
     viewer.move(QPoint(mypos.width()/2-viewer.width()/2,mypos.height()/2-viewer.height()/2));
     mypos.show();
 #endif
