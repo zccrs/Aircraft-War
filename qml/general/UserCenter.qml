@@ -1,6 +1,7 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.0
 import QtWebKit 1.0
+import com.star.widget 1.0
 
 Item{
     id:user_center_main
@@ -14,7 +15,7 @@ Item{
             var uid=mysettings.getValue("user_uid","")
             if(uid!="")
             {
-                var url = "http://www.9smart.cn/topgame/mytop?appid=1&uid="+String(uid)
+                var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
                 post_ranking.post("GET",url)
             }
         }
@@ -28,7 +29,7 @@ Item{
         var uid=mysettings.getValue("user_uid","")
         if(uid!="")
         {
-            var url = "http://www.9smart.cn/topgame/mytop?appid=1&uid="+String(uid)
+            var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
             post_ranking.post("GET",url)
         }
     }
@@ -53,13 +54,26 @@ Item{
         anchors.bottom: parent.bottom
     }
 
-    Image{
+    MyImage{
         id:user_avatar
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: setting01.bottom
         anchors.topMargin: 10
-        sourceSize.width: parent.width >480 ?80:100
+        width: parent.width >480 ?80:100
+        height: width
+        smooth: true
         source: mysettings.getValue("user_avatar","")
+        maskSource: "qrc:/Image/mask.bmp"
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked: {
+                if(user_avatar.maskSource=="")
+                    user_avatar.maskSource="qrc:/Image/mask.bmp"
+                else
+                    user_avatar.maskSource=""
+            }
+        }
     }
 
     Text {
@@ -100,14 +114,12 @@ Item{
     HttpRequest{
         id: post_ranking
         onPostFinish: {
-            console.log(reData)
             var jsondata = JSON.parse(reData)
-            if(jsondata.error === 0)
-            {
-                user_phone_model.text = "玩家设备："+String(jsondata.model)
-                user_ranking.text = "网络排行："+String(jsondata.top)
-                user_score.text = "最新得分："+String(jsondata.score)
-                mysettings.setValue("user_score",parseInt(jsondata.score))
+            if(jsondata&&jsondata.error==0){
+                user_phone_model.text = "玩家设备："+String(jsondata.rank.model)
+                user_ranking.text = "网络排行："+String(jsondata.rank.top)
+                user_score.text = "最新得分："+String(jsondata.rank.score)
+                mysettings.setValue("user_score",parseInt(jsondata.rank.score))
             }
         }
         Component.onCompleted: updataData()
@@ -142,6 +154,7 @@ Item{
             anchors.fill: parent
             onClicked:{
                 music.start_music("button")
+                webLogin.url = "http://www.9smart.cn/member/login"
                 webLogin.opacity=1
             }
         }
@@ -158,93 +171,32 @@ Item{
     WebView{
         id:webLogin
         opacity: 0
-        url:"http://www.9smart.cn/member/login"
         preferredHeight: settings_main.height
         preferredWidth:settings_main.width
         Behavior on opacity {
             NumberAnimation{duration: 300}
         }
-        property string html1: ""
-        property string html2: ""
-        property string html3: ""
-        property bool isBack: false
-        property int currentPage: 0
-
-        function back()
-        {
-            switch(webLogin.currentPage)
-            {
-            case 1:
-                return false
-            case 2:
-            {
-                currentPage--
-                isBack=true
-                html = html1
-                break;
-            }
-
-            case 3:
-            {
-                currentPage--
-                isBack=true
-                html = html2
-                break
-            }
-
-            default:break
-            }
-            return true
-        }
 
         onLoadFinished: {
-            //console.log(currentPage+" , "+isBack)
-            if(!webLogin.isBack){
-                switch(webLogin.currentPage)
-                {
-                case 0:
-                    webLogin.html1 = html
-                    break
-                case 1:
-                    webLogin.html2 = html
-                    break;
-                default:break
-                }
-                webLogin.currentPage++
-            }else webLogin.isBack=false
+            utility.console(title)
 
-            var str = html//"<title>{\"uid\":\"5\",\"nickname\":\"\u2606\u96e8\u540e\u661f\u8fb0\u2606\",\"avatar\":\"http:\/\/q.qlogo.cn\/qqapp\/100387822\/56120F1DDEF5676BB4FB92F42DEC7B86\/40\"}</title>"
+            var jsondata=JSON.parse(title)
+            if( jsondata ){
+                //utility.console("登录成功")
 
-            var reg1 = new RegExp("<title>{.+}</title>")
-            if(reg1.test(str))
-            {
-                var data1 = reg1.exec(str)
-                var reg2 = new RegExp("{.+}")
+                opacity = 0//登陆成功，返回游戏
+                mysettings.setValue("user_uid",jsondata.uid)
+                mysettings.setValue("user_nickname",jsondata.nickname)
+                mysettings.setValue("user_avatar",jsondata.avatar2)
+                mysettings.setValue("logintype", jsondata.logintype)
+                mysettings.setValue("accesstoken", jsondata.accesstoken)
+                mysettings.setValue("user_score",0)//登录完成先将新用户的得分初始化为0
 
-                if(reg2.test(data1))
-                {
-                    var jsondata=JSON.parse(reg2.exec(data1))
+                utility.console("user_uid："+mysettings.getValue("user_uid",""))
+                utility.console("user_nickname："+mysettings.getValue("user_nickname",""))
+                utility.console("user_avatar："+mysettings.getValue("user_avatar",""))
 
-
-                    if( jsondata ){
-                        opacity = 0//登陆成功，返回游戏
-                        mysettings.setValue("user_uid",jsondata.uid)
-                        mysettings.setValue("user_nickname",jsondata.nickname)
-                        mysettings.setValue("user_avatar",jsondata.avatar2)
-                        mysettings.setValue("user_phone_model",jsondata.user_phone_model)
-
-                        utility.console("user_uid："+mysettings.getValue("user_uid",""))
-                        utility.console("user_nickname："+mysettings.getValue("user_nickname",""))
-                        utility.console("user_avatar："+mysettings.getValue("user_avatar",""))
-                        utility.console("user_phone_model"+mysettings.getValue("user_phone_model",""))
-
-                        isBack = true
-                        currentPage = 1
-                        html = html1
-
-                        updataData()//更新用户信息
-                    }
-                }
+                updataData()//更新用户信息
             }
         }
     }
@@ -261,8 +213,10 @@ Item{
             onClicked:
             {
                 music.start_music("button")
-                if(!webLogin.back())
+                if(webLogin.url!=""){
                     webLogin.opacity=0
+                    webLogin.url = ""
+                }
             }
         }
     }

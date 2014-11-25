@@ -17,7 +17,7 @@ Item
         mysettings.setValue("myscore", parseInt(0))//一定要初始化，不然得分不准确
         var temp = mysettings.getValue("cacheScore","")
         if( temp != "" ){//如果上次有上传失败的分数
-            var url="http://www.9smart.cn/topgame?appid=1"
+            var url="http://api.9smart.cn/ranks"
             postScore.post("POST", url, temp)
         }
     }
@@ -43,10 +43,14 @@ Item
     HttpRequest{
         id: postScore
         onPostFinish: {
-            mysettings.setValue("user_score",parseInt(mysettings.getValue("myscore",parseInt(0))))
             mysettings.setValue("cacheScore","")//记得要设为空，不然下次还会post
             mysettings.setValue("cacheScoreInt",0)
-            console.log(reData)
+
+            var data = JSON.parse(reData)
+            if(data&&data.error==0){
+                utility.console("上传得分完成")
+                mysettings.setValue("user_score",parseInt(mysettings.getValue("myscore",parseInt(0))))
+            }
         }
         onError: {
             utility.console("上传分数出错")
@@ -58,38 +62,44 @@ Item
     function addScore(score)
     {
         utility.console( "两个记录分数的值分别是："+score+","+mysettings.getValue("myscore",parseInt(0)) )
-        var temp_times1 = parseInt(planes.gameRuningTime/60000)
-        //temp_times1 = temp_times1==0?1:temp_times1
-        utility.console("所用时间是："+temp_times1)
+        var temp_times1 = parseFloat(parseFloat(planes.gameRuningTime)/60000.0).toFixed(2)
+        utility.console("所用时间为："+temp_times1+"分钟")
 
         var temp = mysettings.getValue("cacheScore","")
         var temp1 = mysettings.getValue("cacheScoreInt",0)
         var uid = mysettings.getValue("user_uid","")
 
-        if( temp!="" & temp1>score ){
+        var url="http://api.9smart.cn/ranks"
+
+        if( temp!="" && temp1>score ){
             mysettings.setValue("myscore",parseInt(temp1))
             var postdata = temp
             console.log(postdata)
             cacheScore = postdata//记录要post的数据
 
-            var url="http://www.9smart.cn/topgame?appid=1"
             postScore.post("POST", url, postdata)
-        }else if(uid != "" & parseInt(score) > parseInt(mysettings.getValue("user_score",0) )){//
+        }else if(uid != "" && parseInt(score) > parseInt(mysettings.getValue("user_score",0) )){//
             if( parseInt(score) !=  parseInt(mysettings.getValue("myscore",parseInt(0))) )
                     return 0;
-            var message = uid+","+String(mysettings.getValue("myscore",parseInt(0)));
 
-            utility.console("将要发送的数据是："+message)
+            var message = uid+","
+                    +String(mysettings.getValue("accesstoken", ""))+","
+                    +String(mysettings.getValue("logintype", ""))+","
+                    +String(mysettings.getValue("myscore",parseInt(0)))+","
+                    +utility.productName+","
+                    +temp_times1;
+
+            utility.console("将要上传的数据是："+message)
             var des_data = Mydes.des( message )
 
             var str_temp = utility.base64Encode(des_data)
-            var temp_times = parseInt(planes.gameRuningTime/60000)
-            var postdata = "{\"score\":\""+str_temp+"\",\"model\":\""+utility.productName+"\",\"time\":"+String(temp_times+1)+"}"
+            var postdata = 'clientid=5&score='+encodeURIComponent(str_temp)
             console.log(postdata)
             cacheScore = postdata//记录要post的数据
-
-            var url="http://www.9smart.cn/topgame?appid=1"
             postScore.post("POST", url, postdata)
+        }else{
+            console.log(uid)
+            console.log(score+","+parseInt(mysettings.getValue("user_score",0) ))
         }
     }
 

@@ -153,7 +153,7 @@ Item
             id: updateApp
             onPostFinish: {
                 var jsondata = JSON.parse(reData)
-                if( jsondata.error == 0 ){
+                if( jsondata.version ){
                     utility.console("最新版本："+jsondata.version)
                     if( utility.appVersion != jsondata.version )
                         update_diglog.open( jsondata.version, jsondata.url )
@@ -169,7 +169,7 @@ Item
             anchors.fill: parent
             onClicked:{
                 music.start_music("button")
-                var url = "http://www.9smart.cn/app/checkversion?appid=1&system="+utility.sysName
+                var url = "http://api.9smart.cn/app/5"
                 updateApp.post ("GET", url)
             }
         }
@@ -243,7 +243,7 @@ Item
         function open(ver,  downloadUrl ){
             appDownloadUrl = downloadUrl
             if( downloadUrl!="" ){
-                dialog_text.text = "新版："+ver
+                dialog_text.text = "新版："+ver+"\n请使用久店下载！"
             }else{
                 dialog_text.text = ver
             }
@@ -266,41 +266,15 @@ Item
 
         Image{
             visible: update_diglog.appDownloadUrl !=""
-            source:yes_download.pressed? "qrc:/Image/button_2_2.png": "qrc:/Image/button_2_1.png"
-            scale: main.height!=640?1:0.75
-            smooth: true
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
-            Text {
-                anchors.centerIn: parent
-                text: "下载"
-                font.family: localFont.name
-                font.pixelSize: main.height!=640?34:26
-            }
-            MouseArea{
-                id: yes_download
-                anchors.fill: parent
-                onClicked: {
-                    music.start_music("button")
-                    update_diglog.opacity = 0
-                    Qt.openUrlExternally(update_diglog.appDownloadUrl)
-                }
-            }
-        }
-        Image{
-            visible: update_diglog.appDownloadUrl !=""
             source:no_download.pressed? "qrc:/Image/button_2_2.png": "qrc:/Image/button_2_1.png"
             scale: main.height!=640?1:0.75
             smooth: true
-            anchors.right: parent.right
-            anchors.rightMargin: 10
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
             Text {
                 anchors.centerIn: parent
-                text: "取消"
+                text: "确定"
                 font.family: localFont.name
                 font.pixelSize: main.height!=640?34:26
             }

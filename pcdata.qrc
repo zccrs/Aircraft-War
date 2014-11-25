@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Image/n9.png</file>
+        <file>Image/n9-r.png</file>
+        <file>Image/n9-w.png</file>
+        <file>sound/achievement.wav</file>
+        <file>sound/bomb.wav</file>
+        <file>sound/bullet.wav</file>
+        <file>sound/button.wav</file>
+        <file>sound/double_laser.wav</file>
+        <file>sound/enemy1_down.wav</file>
+        <file>sound/enemy2_down.wav</file>
+        <file>sound/enemy3_down.wav</file>
+        <file>sound/flying.wav</file>
+        <file>sound/game_music.wav</file>
+        <file>sound/game_over.wav</file>
+        <file>sound/out_porp.wav</file>
+        <file>sound/use_bomb.wav</file>
+    </qresource>
+</RCC>

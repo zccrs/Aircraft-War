@@ -1,6 +1,8 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.0
 import "../general"
+import "qrc:/i18n/des.js" as Mydes
+
 Item{
     id:main
     width: 360
@@ -422,26 +424,7 @@ Item{
             //glint.start()
         }
     }
-    /*Text {
-        id: message
-        scale: 0
-        text: "再按一下退出"
-        y:30
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: "#303030"
-        Behavior on scale {
-            PropertyAnimation{duration: 200}
-        }
+    Component.onCompleted: {
 
-        function open()
-        {
-            scale=1
-            time_quit.start()
-        }
-        Timer{
-            id:time_quit
-            interval: 2000
-            onTriggered: message.scale=0
-        }
-    }*/
+    }
 }

@@ -1,8 +1,12 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.0
+import com.star.widget 1.0
 
 Item{
     id:rank_main
+
+    property bool updateRanking: false
+
     height: parent.height
     width: parent.width
     opacity:0
@@ -16,55 +20,45 @@ Item{
         id: get_network_rank
         onPostFinish: {
             var jsondata = JSON.parse(reData)
-            if(jsondata.error == 0)
-            {
-                for(var i=0; i<jsondata.top10.length; ++i)
+            if(jsondata){
+                var count = jsondata.pager.count
+                game_user_count.text = "总人数："+count
+                for(var i=0; i<jsondata.ranks.length; ++i)
                 {
                     var temp = {
-                        nickname:jsondata.top10[i].nickname,
-                        score:jsondata.top10[i].score,
-                        avatar:jsondata.top10[i].avatar,
-                        user_model:jsondata.top10[i].model,
-                        gameRuningTime:jsondata.top10[i].time
+                        nickname:jsondata.ranks[i].nickname,
+                        score:jsondata.ranks[i].score,
+                        avatar:jsondata.ranks[i].avatar,
+                        user_model:jsondata.ranks[i].model,
+                        gameRuningTime:jsondata.ranks[i].time
                     }
                     rank_model.append(temp)
-
                 }
             }
+
+            updateRanking = false
         }
-    }
-
-    HttpRequest{
-        id:get_game_user_count
-        onPostFinish: {
-            var jsondata = JSON.parse(reData)
-            if( jsondata.error == 0 )
-                game_user_count.text = "总人数："+String(jsondata.count)
-
+        onError: {
+            updateRanking = false
         }
     }
 
     function resetRank( isOntStart )//刷新排行榜
     {
-        if(rank_model.count>0 | isOntStart){
-            rank_model.clear()//先清空原来的排行榜
-            rank_list.rank_page = 1
-            var url="http://www.9smart.cn/topgame/top10?appid=1"
-            get_network_rank.post("GET",url)
-
-            url = "http://www.9smart.cn/topgame/getcount?appid=1"
-            get_game_user_count.post("GET", url)
-        }
+        if(updateRanking)
+            return
+        updateRanking = true//避免重复刷新
+        rank_model.clear()//先清空原来的排行榜
+        rank_list.rank_page = 1
+        var url="http://api.9smart.cn/ranks?clientid=5&page=1"
+        get_network_rank.post("GET",url)
     }
-    function addRank(page)//刷新排行榜
+    function addRank(page)//增加排行榜
     {
         if(rank_model.count>0 ){
             utility.console("增加排行榜")
-            var url="http://www.9smart.cn/topgame/top10?appid=1&page="+String(page)
+            var url="http://api.9smart.cn/ranks?clientid=5&page="+String(page)
             get_network_rank.post("GET",url)
-
-            url = "http://www.9smart.cn/topgame/getcount?appid=1"
-            get_game_user_count.post("GET", url)
         }
     }
 
@@ -76,6 +70,7 @@ Item{
         x:main.width/18
         scale: parent.height!=640?1:0.75
         y:main.quit_y
+
         MouseArea{
             anchors.fill: parent
             onClicked: {
@@ -110,16 +105,17 @@ Item{
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: main.height==854?24:18
             }
-            Image{
+            MyImage{
                 id:user_avatar
-                source: avatar
+
                 width: 50
                 height: 50
-                sourceSize.width: width
-                sourceSize.height: height
+                smooth: true
                 anchors.left: number.right
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
+                maskSource: "qrc:/Image/mask.bmp"
+                source: avatar
             }
             Text{
                 id:user_name

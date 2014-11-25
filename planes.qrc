@@ -62,5 +62,6 @@
         <file>Image/About_01.png</file>
         <file>Image/About_02.png</file>
         <file>Image/dialog.png</file>
+        <file>Image/mask.bmp</file>
     </qresource>
 </RCC>

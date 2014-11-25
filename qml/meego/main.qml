@@ -2,7 +2,8 @@
 import QtQuick 1.1
 import com.nokia.meego 1.1
 import "../general"
-PageStackWindow//
+
+PageStackWindow
 {
     id:mainwindow
     showStatusBar:false
@@ -13,7 +14,6 @@ PageStackWindow//
         running: true
         onTriggered: {
             go1.start()
-            //glint.start()
         }
     }
     Item{

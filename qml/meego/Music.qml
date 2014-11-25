@@ -173,7 +173,7 @@ Item{
             id: game_music
             volume: 0.6
             loopCount: 999
-            source: ":/sound/game_music.wav"
+            source: "/opt/AircraftWar/data/game_music.wav"
             effect: [
                 EchoEffect {
                     delay: 0.001
@@ -189,7 +189,7 @@ Item{
         }
         AudioBuffer {
             id: button
-            source: ":/sound/button.wav"
+            source: "/opt/AircraftWar/data/button.wav"
             volume: 0.7
             effect: [
                 EchoEffect {
@@ -205,7 +205,7 @@ Item{
         }
         AudioBuffer {
             id: achievement
-            source: ":/sound/achievement.wav"
+            source: "/opt/AircraftWar/data/achievement.wav"
             volume: 0.7
             effect: [
                 EchoEffect {
@@ -220,7 +220,7 @@ Item{
         }
         AudioBuffer {
             id: flying
-            source: ":/sound/flying.wav"
+            source: "/opt/AircraftWar/data/flying.wav"
             volume: 0.8
             effect: [
                 EchoEffect {
@@ -235,7 +235,7 @@ Item{
         }
         AudioBuffer {
             id: bullet
-            source: ":/sound/bullet.wav"
+            source: "/opt/AircraftWar/data/bullet.wav"
             volume: 0.8
             effect: [
                 EchoEffect {
@@ -250,7 +250,7 @@ Item{
         }
         AudioBuffer {
             id: bomb
-            source: ":/sound/bomb.wav"
+            source: "/opt/AircraftWar/data/bomb.wav"
             volume: 0.9
             effect: [
                 EchoEffect {
@@ -265,7 +265,7 @@ Item{
         }
         AudioBuffer {
             id: double_laser
-            source: ":/sound/double_laser.wav"
+            source: "/opt/AircraftWar/data/double_laser.wav"
             volume: 0.9
             effect: [
                 EchoEffect {
@@ -280,7 +280,7 @@ Item{
         }
         AudioBuffer {
             id: enemy1_down
-            source: ":/sound/enemy1_down.wav"
+            source: "/opt/AircraftWar/data/enemy1_down.wav"
             volume: 0.8
             effect: [
                 EchoEffect {
@@ -295,7 +295,7 @@ Item{
         }
         AudioBuffer {
             id: enemy2_down
-            source: ":/sound/enemy2_down.wav"
+            source: "/opt/AircraftWar/data/enemy2_down.wav"
             volume: 0.8
             effect: [
                 EchoEffect {
@@ -310,7 +310,7 @@ Item{
         }
         AudioBuffer {
             id: enemy3_down
-            source: ":/sound/enemy3_down.wav"
+            source: "/opt/AircraftWar/data/enemy3_down.wav"
             volume: 0.8
             effect: [
                 EchoEffect {
@@ -325,7 +325,7 @@ Item{
         }
         AudioBuffer {
             id: game_over
-            source: ":/sound/game_over.wav"
+            source: "/opt/AircraftWar/data/game_over.wav"
             volume: 0.9
             effect: [
                 EchoEffect {
@@ -340,7 +340,7 @@ Item{
         }
         AudioBuffer {
             id: out_porp
-            source: ":/sound/out_porp.wav"
+            source: "/opt/AircraftWar/data/out_porp.wav"
             volume: 0.9
             effect: [
                 EchoEffect {
@@ -355,7 +355,7 @@ Item{
         }
         AudioBuffer {
             id: use_bomb
-            source: ":/sound/use_bomb.wav"
+            source: "/opt/AircraftWar/data/use_bomb.wav"
             volume: 0.8
             effect: [
                 EchoEffect {
