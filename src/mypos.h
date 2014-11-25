@@ -6,12 +6,15 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QLabel>
+#include "qmlapplicationviewer.h"
+
+
 class Settings;
 class MyPos : public QLabel
 {
     Q_OBJECT
 public:
-    explicit MyPos(Settings *setting,QLabel *parent = 0);
+    explicit MyPos(Settings *setting, QLabel *parent = 0);
     ~MyPos();
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -21,11 +24,14 @@ public:
     QPixmap pixmap;
     QImage image;
     Settings *mysetting;
-    //void paintEvent(QPaintEvent *hehe);
+
+    void init(QmlApplicationViewer* viewer);
 private:
     int state;
+
+    QmlApplicationViewer* viewer;
 signals:
-    void myStateChanged(int w,int h);
+    void myStateChanged();
 public slots:
     
 };

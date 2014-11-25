@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QWidget>
 #include <QPropertyAnimation>
+
 class WindowPlanes;
 class Bullet : public QDeclarativeItem
 {

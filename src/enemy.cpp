@@ -28,8 +28,6 @@ Enemy::Enemy(WindowPlanes *parent) :
 }
 void Enemy::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget)
 {
-    //new_painter->setRenderHints(QPainter::SmoothPixmapTransform,true);
-
     new_painter->drawPixmap(0,0,*pixmap);
 }
 void Enemy::anime_state(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
@@ -42,7 +40,7 @@ void Enemy::go()
     //setSize(pixmap->size());
     animation.setDuration(speed);
     animation.setStartValue(QPoint(x(),-height()));
-#ifdef HARMATTAN_BOOSTER
+#ifdef MEEGO_EDITION_HARMATTAN
     animation.setEndValue(QPoint(x(),854));
 #else
     animation.setEndValue(QPoint(x(),640));

@@ -15,7 +15,11 @@ QNetworkAccessManager* MyNetworkAccessManagerFactory::create(QObject *parent)
     QNetworkAccessManager* manager = new NetworkAccessManager(parent);
 
 #ifdef Q_OS_SYMBIAN
-    bool useDiskCache = Utility::Instance()->qtVersion() >= 0x040800;
+#if(QT_VERSION >= 0x040800)
+    bool useDiskCache = true;
+#else
+    bool useDiskCache = false;
+#endif
 #else
     bool useDiskCache = true;
 #endif
@@ -61,8 +65,9 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
     if (op == PostOperation){
         req.setRawHeader("User-Agent", "IDP789");
     } else {
-        req.setRawHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53");
+        req.setRawHeader("User-Agent", "Qt;Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53");
     }
+    req.setHeader (QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
     return reply;
 }

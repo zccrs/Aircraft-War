@@ -29,7 +29,7 @@ WindowPlanes::WindowPlanes(QDeclarativeItem *parent) :
 
     thread->start();
 
-#ifdef HARMATTAN_BOOSTER
+#ifdef MEEGO_EDITION_HARMATTAN
     double bulletScaled=0.8,enemyScaled=0.96,enemy3Scaled=0.88,propScaled=1;
 #elif defined(Q_OS_SYMBIAN_V5)//判断qt的版本
     double bulletScaled=0.8,enemyScaled=0.8,enemy3Scaled=0.66,propScaled=1;

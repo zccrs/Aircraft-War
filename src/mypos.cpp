@@ -2,6 +2,8 @@
 #include <QMouseEvent>
 #include "settings.h"
 #include <QDebug>
+#include <QDeclarativeEngine>
+
 MyPos::MyPos(Settings *setting,QLabel *parent) :
     QLabel(parent)
 {
@@ -17,6 +19,8 @@ MyPos::MyPos(Settings *setting,QLabel *parent) :
     pixmap=QPixmap::fromImage(image);
     setPixmap(pixmap);
     setFixedSize(image.size());
+
+    viewer = NULL;
 }
 void MyPos::mousePressEvent(QMouseEvent *event)
 {
@@ -40,8 +44,19 @@ void MyPos::mouseDoubleClickEvent(QMouseEvent *event)
     pixmap=QPixmap::fromImage(image);
     setPixmap(pixmap);
     setFixedSize(image.size());
-    emit myStateChanged(width(),height());
+    emit myStateChanged();
+
+    if(viewer!=NULL){
+        viewer->move(QPoint(width()/2 - viewer->width()/2,height()/2 - viewer->height()/2));
+    }
 }
+
+void MyPos::init(QmlApplicationViewer *viewer)
+{
+    this->viewer = viewer;
+    connect(viewer->engine(), SIGNAL(quit()), SLOT(close()));
+}
+
 MyPos::~MyPos()
 {
     mysetting->setValue("mypos-state",state);

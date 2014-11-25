@@ -1,13 +1,14 @@
 #include "myplanes.h"
 #include <QDebug>
 #include <QGraphicsSceneMouseEvent>
+
 MyPlanes::MyPlanes(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     count=0;//用来记录爆炸时播放到了第几张图片
     planesState=false;
     setFlag(QGraphicsItem::ItemHasNoContents,false);
-#ifdef HARMATTAN_BOOSTER
+#ifdef MEEGO_EDITION_HARMATTAN
     double imageScaled=0.96;
 #elif defined(Q_OS_SYMBIAN_V5)
     double imageScaled=0.72;
@@ -38,7 +39,7 @@ MyPlanes::MyPlanes(QDeclarativeItem *parent) :
     setZValue(1);
     //setSmooth(true);
 }
-void MyPlanes::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget)
+void MyPlanes::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     //new_painter->setRenderHints(QPainter::SmoothPixmapTransform,true);
     new_painter->drawPixmap(0,0,*pixmap);

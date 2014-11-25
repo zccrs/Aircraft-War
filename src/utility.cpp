@@ -1,11 +1,12 @@
 #include "utility.h"
 #include "bullet.h"
+#include <QApplication>
 
-Utility::Utility(QString appVersion, QObject *parent)
+Utility::Utility(QObject *parent)
     :QObject(parent)
 {
-    m_appVersion = appVersion;
-#if defined(Q_OS_SYMBIAN)||defined(HARMATTAN_BOOSTER)||defined(Q_WS_SIMULATOR)
+    m_appVersion = qApp->applicationVersion();
+#if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)
     engine = new QDeclarativeEngine(this);
     component = new QDeclarativeComponent(engine,this);
     component->loadUrl( QUrl("qrc:/qml/general/DeviceInfo.qml") );
@@ -13,9 +14,12 @@ Utility::Utility(QString appVersion, QObject *parent)
     item = qobject_cast<QDeclarativeItem*>(obj);
     if(!item.isNull()){
         m_productName = item->property( "productName" ).toString();
+        qDebug()<<QString::fromUtf8("手机型号：")<<m_productName;
     }
+#elif defined(Q_WS_SIMULATOR)
+    m_productName = QString::fromUtf8("Simulator");
 #else
-    m_productName = QString::fromUtf8("电脑");
+    m_productName = QString::fromUtf8("pc");
 #endif
 }
 
@@ -77,13 +81,13 @@ QString Utility::appVersion()
 
 QString Utility::sysName()
 {
-#if defined(Q_OS_SYMBIAN)||defined(HARMATTAN_BOOSTER)||defined(Q_WS_SIMULATOR)
+#if defined(Q_OS_SYMBIAN)||defined(Q_WS_SIMULATOR)
 #ifdef Q_OS_SYMBIAN_V5
     return "s60v5";
 #else
     return "symbian3";
 #endif
-#elif defined(HARMATTAN_BOOSTER)
+#elif defined(MEEGO_EDITION_HARMATTAN)
     return "meego";
 #else
     return "pc";

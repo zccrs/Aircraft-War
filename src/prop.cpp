@@ -41,7 +41,7 @@ void Prop::go()
     animation.setDuration(1500);
     animation.setEasingCurve(QEasingCurve::InBack);
     animation.setStartValue(QPoint(x(),height()/2));
-#ifdef HARMATTAN_BOOSTER
+#ifdef MEEGO_EDITION_HARMATTAN
     animation.setEndValue(QPoint(x(),854));
 #else
     animation.setEndValue(QPoint(x(),640));

@@ -15,13 +15,13 @@
 
 class Utility : public QObject
 {
-    Q_PROPERTY(QString productName READ productName)
-    Q_PROPERTY(QString appVersion READ appVersion)
-    Q_PROPERTY(QString sysName READ sysName)
+    Q_PROPERTY(QString productName READ productName CONSTANT)
+    Q_PROPERTY(QString appVersion READ appVersion CONSTANT)
+    Q_PROPERTY(QString sysName READ sysName CONSTANT)
 
     Q_OBJECT
 public:
-    explicit Utility(QString appVersion, QObject *parent = 0);
+    explicit Utility(QObject *parent = 0);
 
     Q_INVOKABLE QByteArray base64Encode(QByteArray in);
     Q_INVOKABLE QByteArray base64Decode(QByteArray in);
@@ -31,7 +31,7 @@ public:
     int strToInt( QChar in );
 
 private:
-#if defined(Q_OS_SYMBIAN)||defined(HARMATTAN_BOOSTER)||defined(Q_WS_SIMULATOR)
+#if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
     QPointer<QDeclarativeComponent> component;//
     QPointer<QDeclarativeEngine> engine;///////
     QPointer<QDeclarativeItem> item;

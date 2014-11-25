@@ -3,12 +3,11 @@
 
 #include <QDeclarativeItem>
 #include <QPropertyAnimation>
-
 #include <QPixmap>
 #include <QPainter>
 #include <QTimer>
-class WindowPlanes;
 
+class WindowPlanes;
 class Prop : public QDeclarativeItem
 {
     Q_OBJECT

@@ -19,11 +19,8 @@ Bullet::Bullet(WindowPlanes *parent) :
 
     connect(&animation,SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)),this ,SLOT(anime_state(QAbstractAnimation::State,QAbstractAnimation::State)));
 }
-void Bullet::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget)
+void Bullet::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    //new_painter->setRenderHints(QPainter::SmoothPixmapTransform,true);
-
-    //qDebug()<<"bullet:"<<width()<<height();
     new_painter->drawPixmap(0,0,*pixmap);
 }
 void Bullet::anime_state(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
@@ -34,7 +31,7 @@ void Bullet::anime_state(QAbstractAnimation::State newState, QAbstractAnimation:
 void Bullet::go()
 {
     //setSize(pixmap->size());
-#ifdef HARMATTAN_BOOSTER
+#ifdef MEEGO_EDITION_HARMATTAN
     if( y()<46 )
             deleteLater();
     animation.setDuration(450*y()/688.75);
