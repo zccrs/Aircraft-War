@@ -1,5 +1,5 @@
 This package was debianized by unknown <> on
-Wed, 11 Dec 2013 15:11:46 +0800.
+Wed, 26 Nov 2014 20:40:12 +0800.
 
 It was downloaded from <url://example.com>
 
@@ -32,7 +32,7 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
-The Debian packaging is (C) 2013, unknown <> and
+The Debian packaging is (C) 2014, unknown <> and
 is licensed under the GPL, see above.
 
 

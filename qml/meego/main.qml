@@ -184,7 +184,7 @@ PageStackWindow
                 property string font_names:"00"
 
                 FontLoader { id: localFont;
-                    source: "qrc:/fzmw.ttf"
+                    source: "file:///opt/AircraftWar/data/fzmw.ttf"
                 }
                 Text{
                     id:double_text

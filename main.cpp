@@ -15,7 +15,8 @@
 #include "src/windowplanes.h"
 #include "src/utility.h"
 #include "audioplugin.h"
-#include "src/myimage.h"
+#include "src/myimage.h"*/
+#include "qmlapplicationviewer.h"
 
 #if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
 #else
@@ -32,7 +33,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     QScopedPointer<QApplication> app(createApplication(argc, argv));
-    app->setApplicationName ("Airplane War");
+    app->setApplicationName ("AircraftWar");
     app->setOrganizationName ("Stars");
     app->setApplicationVersion ("2.1.0");
 

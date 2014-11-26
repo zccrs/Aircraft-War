@@ -17,13 +17,13 @@
 class WindowPlanes : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(qreal planeWidth READ planeWidth CONSTANT)
+    Q_PROPERTY(qreal planeHeight READ planeHeight CONSTANT)
+    Q_PROPERTY(int gameRuningTime READ gameRuningTime CONSTANT)
+
 public:
     explicit WindowPlanes(QDeclarativeItem *parent = 0);
     ~WindowPlanes();
-
-    Q_PROPERTY(qreal planeWidth READ planeWidth)
-    Q_PROPERTY(qreal planeHeight READ planeHeight)
-    Q_PROPERTY(int gameRuningTime READ gameRuningTime)
 
     MyPlanes *planes;
 

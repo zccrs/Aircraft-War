@@ -1,11 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=2.0.1
+Version=2.1.0
 Type=Application
 Terminal=false
 Name=飞机大战
 Exec=/usr/bin/invoker --splash /opt/AircraftWar/data/MeeGo.png --type=d -s /opt/AircraftWar/bin/AircraftWar
-Icon=/usr/share/themes/base/meegotouch/AircraftWar/AircraftWarmeego.svg
+Icon=/usr/share/icons/hicolor/80x80/apps/AircraftWar80.png
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true
 X-Osso-Type=application/x-executable

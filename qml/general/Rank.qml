@@ -55,6 +55,10 @@ Item{
     }
     function addRank(page)//增加排行榜
     {
+        if(updateRanking)
+            return
+        updateRanking = true//避免重复刷新
+
         if(rank_model.count>0 ){
             utility.console("增加排行榜")
             var url="http://api.9smart.cn/ranks?clientid=5&page="+String(page)

@@ -12,7 +12,6 @@ Item{
         onCurrentProfileChanged://监控情景模式的变化
         {
             mymixer.absoluteVolume=systemInfo.voiceRingtoneVolume/100//如果调整了情景模式，则改变声音大小
-            //console.log("mymixer.absoluteVolume:"+mymixer.absoluteVolume)
         }
     }
 

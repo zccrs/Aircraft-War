@@ -23,14 +23,15 @@ Item{
 
     function updataData()
     {
-        user_avatar .source = mysettings.getValue("user_avatar","")
-        user_nickname.text = "用户名："+mysettings.getValue("user_nickname","")
-
         var uid=mysettings.getValue("user_uid","")
-        if(uid!="")
-        {
+        if(uid!=""){
+            user_avatar .source = mysettings.getValue("user_avatar","")
+            user_nickname.text = "用户名："+mysettings.getValue("user_nickname","")
+
             var url = "http://api.9smart.cn/rank/"+String(uid)+"?clientid=5"
             post_ranking.post("GET",url)
+        }else{
+            user_nickname.text = "用户名：未登录"
         }
     }
 

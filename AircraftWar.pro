@@ -11,7 +11,6 @@ MOBILITY += systeminfo
 sound.source = sound
 sound.target = ./
 symbian {
-
     DEPLOYMENTFOLDERS += sound
     TARGET.UID3 = 0x20072840
     TARGET.CAPABILITY += NetworkServices
@@ -44,7 +43,7 @@ contains(MEEGO_EDITION, harmattan){
     export(data.files)
     export(data.path)
 
-    INSTALLS += icon64 gameclassify iconsvg data
+    INSTALLS += iconsvg icon64 gameclassify  data
 }
 
 
@@ -76,7 +75,7 @@ simulator{
 # MOBILITY +=
 
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
-# CONFIG += qdeclarative-boostable
+CONFIG += qdeclarative-boostable
 
 # Add dependency to Symbian components
 # CONFIG += qt-components

@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "windowplanes.h"
 #include <QDebug>
+
 Bullet::Bullet(WindowPlanes *parent) :
     QDeclarativeItem(parent)
 {
