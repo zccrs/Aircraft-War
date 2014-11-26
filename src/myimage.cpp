@@ -199,7 +199,6 @@ void MyImage::setSource(QUrl arg)
 {
     if (!m_cache||m_source != arg) {
         setStatus(Loading);
-
         m_source = arg;
         reLoad();
         //加载图片
@@ -249,6 +248,8 @@ void MyImage::setStatus(MyImage::State arg)
 void MyImage::reLoad()
 {
     QString str = m_source.toString();
+    if(str=="")
+        return;
 
     QPixmap *temp_pximap = QPixmapCache::find(str);
     if(temp_pximap!=NULL){//如果缓存区已经有图片

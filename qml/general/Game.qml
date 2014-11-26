@@ -93,8 +93,9 @@ Item
             var des_data = Mydes.des( message )
 
             var str_temp = utility.base64Encode(des_data)
+            console.log(str_temp)
             var postdata = 'clientid=5&score='+encodeURIComponent(str_temp)
-            console.log(postdata)
+
             cacheScore = postdata//记录要post的数据
             postScore.post("POST", url, postdata)
         }else{

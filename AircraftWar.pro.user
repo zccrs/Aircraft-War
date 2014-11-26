@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by Qt Creator 2.4.1, 2014-11-26T21:10:21. -->
+<!-- Written by Qt Creator 2.4.1, 2014-11-26T23:38:14. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -347,9 +347,9 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.S60SignBuildStep</value>
       <value type="QString" key="Qt4ProjectManager.S60CreatePackageStep.Certificate"></value>
       <value type="QString" key="Qt4ProjectManager.S60CreatePackageStep.Keyfile"></value>
-      <value type="int" key="Qt4ProjectManager.S60CreatePackageStep.SignMode">0</value>
+      <value type="int" key="Qt4ProjectManager.S60CreatePackageStep.SignMode">2</value>
       <value type="bool" key="Qt4ProjectManager.S60CreatorPackageStep.SmartInstaller">false</value>
-      <value type="bool" key="Qt4ProjectManager.S60CreatorPackageStep.SuppressPatchWarningDialog">false</value>
+      <value type="bool" key="Qt4ProjectManager.S60CreatorPackageStep.SuppressPatchWarningDialog">true</value>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">部署</value>
@@ -362,7 +362,7 @@
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Deploy</value>
     </valuemap>
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">部署trunk至Symbian设备</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">部署至Symbian设备</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.S60DeployConfiguration</value>
     <value type="int" key="Qt4ProjectManager.S60DeployConfiguration.CommunicationChannel">0</value>

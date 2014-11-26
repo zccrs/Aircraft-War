@@ -2,7 +2,7 @@
 //this takes the key, the message, and whether to encrypt or decrypt
 function des ( message, key , encrypt, mode, iv, padding) {
   var m=0, i, j, temp, temp2, right1, right2, left, right, looping;
-  if( !key ) key="xingchen"
+  if( !key ) key="Xing"
   if( !encrypt ) encrypt = 1
   if(!mode ) mode = 0
   //declaring this locally speeds things up a bit
