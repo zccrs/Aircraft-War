@@ -61,7 +61,6 @@ Item{
         anchors.top: setting01.bottom
         anchors.topMargin: 10
         width: parent.width >480 ?80:100
-        height: width
         smooth: true
         source: mysettings.getValue("user_avatar","")
         maskSource: "qrc:/Image/mask.bmp"

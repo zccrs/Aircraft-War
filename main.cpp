@@ -15,7 +15,7 @@
 #include "src/windowplanes.h"
 #include "src/utility.h"
 #include "audioplugin.h"
-#include "src/myimage.h"*/
+#include "src/myimage.h"
 #include "qmlapplicationviewer.h"
 
 #if defined(Q_OS_SYMBIAN)||defined(MEEGO_EDITION_HARMATTAN)||defined(Q_WS_SIMULATOR)
