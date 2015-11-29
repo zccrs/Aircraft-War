@@ -1,6 +1,9 @@
 #include "settings.h"
 #include <QSettings>
 #include <QDebug>
+#include <QStandardPaths>
+#include <QCoreApplication>
+
 Settings::Settings(QObject *parent) :
     QObject(parent)
 {

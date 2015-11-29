@@ -1,24 +1,33 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include <QDeclarativeItem>
 #include <QThread>
-
+#if(QT_VERSION>=0x050000)
+#include <QQuickPaintedItem>
+#else
+#include <QDeclarativeItem>
+#endif
 #include <QPixmap>
 #include <QPainter>
-#include <QWidget>
 #include <QPropertyAnimation>
 
 class WindowPlanes;
+#if(QT_VERSION>=0x050000)
+class Bullet : public QQuickPaintedItem
+#else
 class Bullet : public QDeclarativeItem
+#endif
 {
     Q_OBJECT
 public:
     explicit Bullet(WindowPlanes *parent = 0);
-    ~Bullet();
     QPropertyAnimation animation;
     QPixmap *pixmap;
-    void paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget=0);
+#if(QT_VERSION>=0x050000)
+    void paint(QPainter * painter);
+#else
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget=0);
+#endif
     bool mystate;
     int mytype;
     void setNumber(int x);//给这个对象设置一个唯一的编号

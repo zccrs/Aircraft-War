@@ -2,27 +2,39 @@
 #ifndef WINDOWPLANES_H
 #define WINDOWPLANES_H
 
-#include <QDeclarativeItem>
 #include <QTimer>
 #include <QTime>
 #include <QImage>
 #include <QPixmap>
 #include <QThread>
 #include <QPointer>
-#include "myplanes.h"
-#include "bullet.h"
-#include "enemy.h"
+#if(QT_VERSION>=0x050000)
+#include <QQuickPaintedItem>
+#else
+#include <QDeclarativeItem>
+#endif
 #include "mythread.h"
-#include "prop.h"
+#include "myplanes.h"
+
+#if(QT_VERSION<0x050000)
 class WindowPlanes : public QDeclarativeItem
+#else
+class WindowPlanes : public QQuickPaintedItem
+#endif
 {
     Q_OBJECT
+
     Q_PROPERTY(qreal planeWidth READ planeWidth CONSTANT)
     Q_PROPERTY(qreal planeHeight READ planeHeight CONSTANT)
     Q_PROPERTY(int gameRuningTime READ gameRuningTime CONSTANT)
 
 public:
+#if(QT_VERSION<0x050000)
     explicit WindowPlanes(QDeclarativeItem *parent = 0);
+#else
+    explicit WindowPlanes(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
+#endif
     ~WindowPlanes();
 
     MyPlanes *planes;

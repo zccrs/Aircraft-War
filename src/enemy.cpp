@@ -1,15 +1,26 @@
 #include "enemy.h"
 #include <QDebug>
+#include "utility.h"
 #include "windowplanes.h"
+
 Enemy::Enemy(WindowPlanes *parent) :
+#if(QT_VERSION<0x050000)
     QDeclarativeItem(parent)
-{
+#else
+    QQuickPaintedItem(parent)
+#endif
+{   
+    utility = Utility::createUtilityClass ();
+
     mytype=1;
     count=0;
     speed=3500;
-
+#if(QT_VERSION<0x050000)
     setFlag(QGraphicsItem::ItemHasNoContents,false);
     animation.setPropertyName("pos");
+#else
+    animation.setPropertyName("y");
+#endif
     animation.setTargetObject(this);
     connect(&animation,SIGNAL(stateChanged(QAbstractAnimation::State,QAbstractAnimation::State)),this ,SLOT(anime_state(QAbstractAnimation::State,QAbstractAnimation::State)));
     connect(&mymovie,SIGNAL(timeout()),this,SLOT(movie()));
@@ -26,11 +37,18 @@ Enemy::Enemy(WindowPlanes *parent) :
     connect(parent,SIGNAL(bomb_all_enemy()),SLOT(startMovie()));
     connect(this,SIGNAL(play_music(QString)),parent,SIGNAL(play_music(QString)));
 }
-void Enemy::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget)
+#if(QT_VERSION<0x050000)
+void Enemy::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     new_painter->drawPixmap(0,0,*pixmap);
 }
-void Enemy::anime_state(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+#else
+void Enemy::paint(QPainter *painter)
+{
+    painter->drawPixmap(0,0,*pixmap);
+}
+#endif
+void Enemy::anime_state(QAbstractAnimation::State newState, QAbstractAnimation::State)
 {
     if(newState==QAbstractAnimation::Stopped)
         deleteLater();
@@ -39,10 +57,14 @@ void Enemy::go()
 {
     //setSize(pixmap->size());
     animation.setDuration(speed);
-    animation.setStartValue(QPoint(x(),-height()));
 #ifdef MEEGO_EDITION_HARMATTAN
+    animation.setStartValue(QPoint(x(),-height()));
     animation.setEndValue(QPoint(x(),854));
+#elif defined(Q_OS_SAILFISH)
+    animation.setStartValue(-height());
+    animation.setEndValue(utility->screenHeight ());
 #else
+    animation.setStartValue(QPoint(x(),-height()));
     animation.setEndValue(QPoint(x(),640));
 #endif
     animation.start();
@@ -80,7 +102,8 @@ void Enemy::isMe(int num, int type)//type是子弹的类型
                 emit play_music("enemy1_down");
             else if(mytype==2)
                 emit play_music("enemy2_down");
-            else emit play_music("enemy3_down");
+            else
+                emit play_music("enemy3_down");
             emit addScore(score);
         }
         else
@@ -117,6 +140,7 @@ void Enemy::vary()
     //update(0,0,width(),height());
     if(mytype==3)
         flasher.start(50);
+    update();
 }
 
 void Enemy::my_flasher()
@@ -126,6 +150,7 @@ void Enemy::my_flasher()
     else
         pixmap=blast1;
 
+    update();
     //update(0,0,width(),height());
 }
 
@@ -198,6 +223,8 @@ void Enemy::movie()
     }
     //update(0,0,width(),height());
     count++;
+
+    update();
 }
 
 Enemy::~Enemy()

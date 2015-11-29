@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=harbour-aircraftwar
+Exec=harbour-aircraftwar
+Name=AircraftWarc
+# translation example:
+# your app name in German locale (de)
+Name[de]=AircraftWar
+Name[en]=AircraftWar
+Name[zh_CN]=飞机大战

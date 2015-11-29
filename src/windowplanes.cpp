@@ -1,8 +1,15 @@
 #include "windowplanes.h"
+#include "bullet.h"
+#include "enemy.h"
+#include "prop.h"
 
-
+#if(QT_VERSION<0x050000)
 WindowPlanes::WindowPlanes(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
+#else
+WindowPlanes::WindowPlanes(QQuickItem *parent) :
+    QQuickPaintedItem(parent)
+#endif
 {
     number=0;
     game_state="stop";
@@ -33,6 +40,8 @@ WindowPlanes::WindowPlanes(QDeclarativeItem *parent) :
     double bulletScaled=0.8,enemyScaled=0.96,enemy3Scaled=0.88,propScaled=1;
 #elif defined(Q_OS_SYMBIAN_V5)//判断qt的版本
     double bulletScaled=0.8,enemyScaled=0.8,enemy3Scaled=0.66,propScaled=1;
+#elif defined(Q_OS_SAILFISH)
+    double bulletScaled=1,enemyScaled=1,enemy3Scaled=1,propScaled=1;
 #else
     double bulletScaled=0.6,enemyScaled=0.72,enemy3Scaled=0.66,propScaled=0.75;
 #endif
@@ -138,8 +147,13 @@ WindowPlanes::WindowPlanes(QDeclarativeItem *parent) :
     grade=1;
 
     pixmap_bullet=&pixmap_bullet1;
-
 }
+
+#if(QT_VERSION>=0x050000)
+void WindowPlanes::paint(QPainter *)
+{
+}
+#endif
 
 qreal WindowPlanes::planeWidth()
 {
@@ -652,7 +666,7 @@ void WindowPlanes::enemy_timer_start()
     }
 }
 
-void WindowPlanes::pressBomb(){//进入2秒内无飞机状怊
+void WindowPlanes::pressBomb(){//进入2秒内无飞机状态
     time_no_enemy_begin.start();//记录无飞机状态是从什么时候开始的
     save_timer_two_secs = 2000;
     enemy_timer_stop();
@@ -729,7 +743,7 @@ void WindowPlanes::start_game()
         //qDebug()<<QString::fromUtf8("飞机的位置是")<<width()<<height();
 
         game_state="run";
-        planes->show();
+        planes->setVisible(true);
         planes->timer.start(100);
         timer_bullet.start(230);
         time_game_start_runing.start();

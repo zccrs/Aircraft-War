@@ -1,15 +1,23 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <QDeclarativeItem>
 #include <QPropertyAnimation>
 #include <QPixmap>
-
+#if(QT_VERSION>=0x050000)
+#include <QQuickPaintedItem>
+#else
+#include <QDeclarativeItem>
+#endif
 #include <QPainter>
 #include <QTimer>
-class WindowPlanes;
 
+class WindowPlanes;
+class Utility;
+#if(QT_VERSION<0x050000)
 class Enemy : public QDeclarativeItem
+#else
+class Enemy : public QQuickPaintedItem
+#endif
 {
     Q_OBJECT
 public:
@@ -18,7 +26,11 @@ public:
     QPropertyAnimation animation;
     QPixmap *pixmap;
     QPixmap *blast1,*blast2,*blast3,*blast4,*blast5,*blast6,*blast7,*blast8,*blast9;//最后一个用来储存自己原本的样子
-    void paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget=0);
+#if(QT_VERSION>=0x050000)
+    void paint(QPainter * painter);
+#else
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget=0);
+#endif
     Enemy *last,*next;//分别指向和他相邻的两个飞机
     QTimer mymovie,flasher;
     int HP;//生命值
@@ -34,6 +46,8 @@ signals:
     void play_music(const QString music_name);//播放音频
 private:
     int number;
+
+    Utility *utility;
 private slots:
     void vary();//当子弹击中自己时会变成另一张图片，在10毫秒后调用此函数变回来
     void my_flasher();//大飞机飞行过程中头部的闪动

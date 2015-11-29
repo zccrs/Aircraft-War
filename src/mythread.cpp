@@ -3,7 +3,7 @@
 #include "myplanes.h"
 #include "math.h"
 #include <QDebug>
-//#include <QThread>
+
 MyThread::MyThread(WindowPlanes *win,QObject *parent) :
     QObject(parent)
 {
@@ -28,10 +28,10 @@ void MyThread::isBulletAndEnemy()//判断子弹是否打中敌方飞机的函数
 }
 void MyThread::isPlanesAndEnemyOrProp()
 {
-    double l=planes->x()+0.8*planes->width()/2.0;//飞机的左边界
+    double l=planes->x()+0.1*planes->width();//飞机的左边界
     double u=planes->y()+planes->height()*0.2;//飞机的上边界
-    double d=u+planes->height()-planes->height()*0.4;//飞机的下边界
-    double r=planes->x()+1.2*planes->width()/2.0;//飞机的右边界
+    double d=u+planes->height()*0.8;//飞机的下边界
+    double r=planes->x()+0.9*planes->width();//飞机的右边界
     for(int i=0;i<count_prop;i++)//从第一个道具循环
     {
         if(u<prop[i][1]&&d>prop[i][0]&&l<prop[i][3]&&r>prop[i][2])
@@ -164,7 +164,4 @@ MyThread::~MyThread()
     if (timer){
         timer->deleteLater();
     }
-//    timer.stop();
-//    qDebug()<<"thread quit";
-//    thread()->quit(); (不要在子线程里终结自己)
 }

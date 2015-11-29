@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Image/info_sailfish.png</file>
+        <file>sailfish_qml/About.qml</file>
+        <file>sailfish_qml/Game.qml</file>
+        <file>sailfish_qml/main.qml</file>
+        <file>sailfish_qml/MainPage.qml</file>
+        <file>sailfish_qml/Music.qml</file>
+        <file>sailfish_qml/Rank.qml</file>
+        <file>sailfish_qml/Setting.qml</file>
+        <file>sailfish_qml/UserCenter.qml</file>
+    </qresource>
+</RCC>

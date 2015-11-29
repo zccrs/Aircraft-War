@@ -1,17 +1,29 @@
 #include "myplanes.h"
+#include "windowplanes.h"
 #include <QDebug>
+#if(QT_VERSION<0x050000)
 #include <QGraphicsSceneMouseEvent>
+#endif
 
+#if(QT_VERSION<0x050000)
 MyPlanes::MyPlanes(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
+#else
+MyPlanes::MyPlanes(QQuickPaintedItem *parent) :
+    QQuickPaintedItem(parent)
+#endif
 {
     count=0;//用来记录爆炸时播放到了第几张图片
     planesState=false;
+#if(QT_VERSION<0x050000)
     setFlag(QGraphicsItem::ItemHasNoContents,false);
+#endif
 #ifdef MEEGO_EDITION_HARMATTAN
     double imageScaled=0.96;
 #elif defined(Q_OS_SYMBIAN_V5)
     double imageScaled=0.72;
+#elif defined(Q_OS_SAILFISH)
+    double imageScaled=1;
 #else
     double imageScaled=0.72;
     //double imageScaled=0.96;
@@ -36,14 +48,27 @@ MyPlanes::MyPlanes(QDeclarativeItem *parent) :
 
     connect(&timer,SIGNAL(timeout()),SLOT(setPlanesState()));
     connect(&mymovie,SIGNAL(timeout()),SLOT(movie()));
-    setZValue(1);
-    //setSmooth(true);
+    WindowPlanes* m_parent = qobject_cast<WindowPlanes*>(parent);
+    connect(m_parent,SIGNAL(pause_launch_bullet()),SLOT(pause_me()));
+    connect(m_parent,SIGNAL(resume_launch_bullet()),SLOT(resume_me()));
+#if(QT_VERSION<0x050000)
+    setZValue(2);
+    setFlag(QGraphicsItem::ItemHasNoContents,false);
+#else
+    setZ(1);
+#endif
 }
+#if(QT_VERSION<0x050000)
 void MyPlanes::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    //new_painter->setRenderHints(QPainter::SmoothPixmapTransform,true);
     new_painter->drawPixmap(0,0,*pixmap);
 }
+#else
+void MyPlanes::paint(QPainter *painter)
+{
+    painter->drawPixmap(0,0,*pixmap);
+}
+#endif
 void MyPlanes::setPlanesState()
 {
     //qDebug()<<"setPlanesState";
@@ -59,7 +84,7 @@ void MyPlanes::setPlanesState()
         planesState=true;
     }
     //qDebug()<<"timer debug:"<<width()<<height();
-
+    update();
     //update(0,0,width(),height());
 }
 void MyPlanes::movie()
@@ -88,6 +113,16 @@ void MyPlanes::movie()
     }
     count++;
     //update(0,0,width(),height());
+}
+
+void MyPlanes::pause_me()
+{
+    timer.stop ();
+}
+
+void MyPlanes::resume_me()
+{
+    timer.start ();
 }
 
 void MyPlanes::remove_me()

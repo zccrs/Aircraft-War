@@ -1,17 +1,25 @@
 #ifndef MYNETWORKACCESSMANAGERFACTORY_H
 #define MYNETWORKACCESSMANAGERFACTORY_H
 
-#include <QtDeclarative>
 #include <QtNetwork>
 #include <QSslConfiguration>
+#if(QT_VERSION>=0x050000)
+#include <QtQuick>
+#else
+#include <QtDeclarative>
+#endif
 
+#if(QT_VERSION>=0x050000)
+class MyNetworkAccessManagerFactory : public QObject,public QQmlNetworkAccessManagerFactory
+#else
 class MyNetworkAccessManagerFactory : public QObject,public QDeclarativeNetworkAccessManagerFactory
+#endif
 {
     Q_OBJECT
 public:
     explicit MyNetworkAccessManagerFactory( QObject *parent = 0 );
     virtual QNetworkAccessManager* create(QObject *parent);
-public slots:
+public Q_SLOTS:
     void onIgnoreSSLErrors(QNetworkReply* reply,QList<QSslError> error);
 private:
     QMutex mutex;
@@ -21,6 +29,7 @@ private:
 class NetworkAccessManager : public QNetworkAccessManager
 {
     Q_OBJECT
+
 public:
     explicit NetworkAccessManager(QObject *parent = 0);
 protected:
@@ -35,13 +44,13 @@ public:
 
     virtual QList<QNetworkCookie> cookiesForUrl(const QUrl &url) const;
     virtual bool setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url);
-
+    QList<QNetworkCookie> cookies() const;
 private:
     explicit NetworkCookieJar(QObject *parent = 0);
     ~NetworkCookieJar();
-
+    void load();
     mutable QMutex mutex;
-    QNetworkCookie keepAliveCookie;
+    //QNetworkCookie keepAliveCookie;
 };
 
 #endif // MYNETWORKACCESSMANAGERFACTORY_H

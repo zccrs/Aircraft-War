@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QPointer>
+
 class WindowPlanes;
 class MyPlanes;
 class MyThread : public QObject

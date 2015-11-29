@@ -1,10 +1,11 @@
 #include "mynetworkaccessmanagerfactory.h"
 #include <QUrl>
+#include <QDebug>
 
 MyNetworkAccessManagerFactory::MyNetworkAccessManagerFactory(QObject *parent) :
     QObject(parent)
 {
-    m_networkManager = new QNetworkAccessManager(this);
+    m_networkManager = new NetworkAccessManager(this);
     connect(m_networkManager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this,SLOT(onIgnoreSSLErrors(QNetworkReply*,QList<QSslError>)));
 }
 
@@ -13,30 +14,6 @@ QNetworkAccessManager* MyNetworkAccessManagerFactory::create(QObject *parent)
     QMutexLocker lock(&mutex);
     Q_UNUSED(lock);
     QNetworkAccessManager* manager = new NetworkAccessManager(parent);
-
-#ifdef Q_OS_SYMBIAN
-#if(QT_VERSION >= 0x040800)
-    bool useDiskCache = true;
-#else
-    bool useDiskCache = false;
-#endif
-#else
-    bool useDiskCache = true;
-#endif
-    if (useDiskCache){
-        QNetworkDiskCache* diskCache = new QNetworkDiskCache(parent);
-        QString dataPath = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
-        QDir dir(dataPath);
-        if (!dir.exists()) dir.mkpath(dir.absolutePath());
-
-        diskCache->setCacheDirectory(dataPath);
-        diskCache->setMaximumCacheSize(3*1024*1024);
-        manager->setCache(diskCache);
-    }
-    
-    QNetworkCookieJar* cookieJar = NetworkCookieJar::GetInstance();
-    manager->setCookieJar(cookieJar);
-    cookieJar->setParent(0);
 
     return manager;
 }
@@ -50,36 +27,52 @@ void MyNetworkAccessManagerFactory::onIgnoreSSLErrors(QNetworkReply *reply, QLis
 NetworkAccessManager::NetworkAccessManager(QObject *parent) :
     QNetworkAccessManager(parent)
 {
+    QNetworkCookieJar* cookieJar = NetworkCookieJar::GetInstance();
+    setCookieJar(cookieJar);
+    cookieJar->setParent(0);
 }
 
 QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData)
 {
     QNetworkRequest req(request);
-
     QSslConfiguration config;
 
     config.setPeerVerifyMode(QSslSocket::VerifyNone);
+#if(QT_VERSION>=0x050000)
+    config.setProtocol(QSsl::TlsV1_0);
+#else
     config.setProtocol(QSsl::TlsV1);
+#endif
     req.setSslConfiguration(config);
     // set user-agent
     if (op == PostOperation){
-        req.setRawHeader("User-Agent", "IDP789");
+        req.setRawHeader("User-Agent", "IDP");
     } else {
         req.setRawHeader("User-Agent", "Qt;Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53");
     }
-    req.setHeader (QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    req.setRawHeader("client", "true");
+
     QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
+
     return reply;
 }
 
 NetworkCookieJar::NetworkCookieJar(QObject *parent) :
     QNetworkCookieJar(parent)
 {
-    keepAliveCookie = QNetworkCookie("ka", "open");
+    //keepAliveCookie = QNetworkCookie("ka", "open");
+    load ();
 }
 
 NetworkCookieJar::~NetworkCookieJar()
 {
+}
+
+void NetworkCookieJar::load()
+{
+    QMutexLocker lock(&mutex);
+    Q_UNUSED(lock);
+
 }
 
 NetworkCookieJar* NetworkCookieJar::GetInstance()
@@ -109,3 +102,7 @@ bool NetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList
     return QNetworkCookieJar::setCookiesFromUrl(cookieList, url);
 }
 
+QList<QNetworkCookie> NetworkCookieJar::cookies() const
+{
+    return allCookies ();
+}

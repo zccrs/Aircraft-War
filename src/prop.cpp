@@ -1,16 +1,28 @@
 #include "prop.h"
 #include "windowplanes.h"
-//#include "myplanes.h"
+#include "utility.h"
+
 Prop::Prop(WindowPlanes *parent) :
+#if(QT_VERSION<0x050000)
     QDeclarativeItem(parent)
+#else
+    QQuickPaintedItem(parent)
+ #endif
 {
+    utility = Utility::createUtilityClass ();
     //haha=0;
     mytype=0;
     mystate=true;
 
+#if(QT_VERSION<0x050000)
     setZValue(2);
     setFlag(QGraphicsItem::ItemHasNoContents,false);
     animation.setPropertyName("pos");
+#else
+    setZ(1);
+    animation.setPropertyName("y");
+#endif
+
     animation.setTargetObject(this);
 
 
@@ -25,25 +37,35 @@ Prop::Prop(WindowPlanes *parent) :
 }
 
 
-void Prop::anime_state(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
+void Prop::anime_state(QAbstractAnimation::State newState, QAbstractAnimation::State)
 {
     if(newState==QAbstractAnimation::Stopped)
         deleteLater();
 }
-void Prop::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *new_style, QWidget *new_widget)
+#if(QT_VERSION<0x050000)
+void Prop::paint(QPainter *new_painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    //new_painter->setRenderHints(QPainter::SmoothPixmapTransform,true);
     new_painter->drawPixmap(0,0,*pixmap);
 }
+#else
+void Prop::paint(QPainter *painter)
+{
+    painter->drawPixmap(0,0,*pixmap);
+}
+#endif
 void Prop::go()
 {
     //setSize(pixmap->size());
     animation.setDuration(1500);
     animation.setEasingCurve(QEasingCurve::InBack);
-    animation.setStartValue(QPoint(x(),height()/2));
 #ifdef MEEGO_EDITION_HARMATTAN
+    animation.setStartValue(QPoint(x(),height()/2));
     animation.setEndValue(QPoint(x(),854));
+#elif defined(Q_OS_SAILFISH)
+    animation.setStartValue(height()/2);
+    animation.setEndValue(utility->screenHeight ());
 #else
+    animation.setStartValue(QPoint(x(),height()/2));
     animation.setEndValue(QPoint(x(),640));
 #endif
 
